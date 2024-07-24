@@ -1,16 +1,12 @@
-package ru.yandex.practicum.taskmanager.Files;
+package ru.yandex.practicum.taskmanager.files;
 
 import java.util.ArrayList;
 
 public class Epic extends Task {
     protected ArrayList<Integer> subtaskIds = new ArrayList<>();
 
-    public Epic(int id, String name, String description, String status) {
-        super(id, name, description, status);
-    }
-
-    public Epic(String name, String description, String status) {
-        super(name, description, status);
+    public Epic(String name, String description) {
+        super(name, description);
     }
 
 

@@ -1,7 +1,7 @@
-package ru.yandex.practicum.taskmanager.Manager;
+package ru.yandex.practicum.taskmanager.manager;
 
 import java.util.ArrayList;
-import ru.yandex.practicum.taskmanager.Files.*;
+import ru.yandex.practicum.taskmanager.files.*;
 
 public interface ITaskManager{
     ArrayList<Task> getTasks();

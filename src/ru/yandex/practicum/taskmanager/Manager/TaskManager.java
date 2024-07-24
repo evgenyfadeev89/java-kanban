@@ -1,10 +1,10 @@
-package ru.yandex.practicum.taskmanager.Manager;
+package ru.yandex.practicum.taskmanager.manager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import ru.yandex.practicum.taskmanager.Files.*;
+import ru.yandex.practicum.taskmanager.files.*;
 
 public class TaskManager implements ITaskManager {
     private int id = 1;
@@ -12,7 +12,9 @@ public class TaskManager implements ITaskManager {
     protected final HashMap<Integer, Subtask> subtasks = new HashMap<>();
     protected final HashMap<Integer, Epic> epics = new HashMap<>();
 
-
+    private int generateId() {
+        return ++id;
+    }
     public int getId() {
         return id;
     }
@@ -62,20 +64,23 @@ public class TaskManager implements ITaskManager {
 
     @Override
     public int addNewTask (Task task) {
+        task.setId(getId());
         tasks.put(task.getId(), task);
-        id++;
+        generateId(); //добавил вызов на увеличение при создании задач
         return task.getId();
     }
 
     @Override
     public int addNewEpic (Epic epic) {
+        epic.setId(getId());
         epics.put(epic.getId(), epic);
-        id++;
+        generateId();
         return epic.getId();
     }
 
     @Override
      public int addNewSubtask(Subtask subtask) {
+        subtask.setId(getId());
         Epic epic = getEpic(subtask.getEpicId());
         if(epic == null) {
             System.out.println("такого эпика нет" + subtask.getEpicId());
@@ -83,7 +88,7 @@ public class TaskManager implements ITaskManager {
         }
         epic.addSubtaskId(subtask.getId());
         subtasks.put(subtask.getId(), subtask);
-
+        generateId();
         updateEpicStatus(subtask);
         return subtask.getId();
     }
@@ -91,42 +96,45 @@ public class TaskManager implements ITaskManager {
 
     @Override
     public void updateEpicStatus(Subtask subtask) {
-        Set<String> allStatus = new HashSet<String>();
+        Set<TaskStatus> allStatus = new HashSet<>();
         Epic epic = getEpic(subtask.getEpicId());
         for(int idSubtask: epic.getSubtaskIds()){
             allStatus.add(subtasks.get(idSubtask).getStatus());
         }
         if(allStatus.isEmpty()) {
-            epic.setStatus("NEW");
+            epic.setStatus(TaskStatus.NEW);
             return;
         } else if (allStatus.size() == 1) {
-            if(allStatus.iterator().next().equals("NEW")) {
-                epic.setStatus("NEW");
+            if(allStatus.contains(TaskStatus.NEW)) {
+                epic.setStatus(TaskStatus.NEW);
                 return;
-            } else if (allStatus.iterator().next().equals("DONE")) {
-                epic.setStatus("DONE");
+            } else if (allStatus.contains(TaskStatus.DONE)) {
+                epic.setStatus(TaskStatus.DONE);
                 return;
             }
         }
-        System.out.println("дошел сюда конец"); //debug
-        epic.setStatus("IN_PROGRESS");
+        epic.setStatus(TaskStatus.IN_PROGRESS);
     }
 
-    public void updateEpicStatus(int idEpic) {
-        Set<String> allStatus = new HashSet<String>();
+    private void updateEpicStatus(int idEpic) {
+        Set<TaskStatus> allStatus = new HashSet<>();
         Epic epic = getEpic(idEpic);
         for(int idSubtask: epic.getSubtaskIds()){
             allStatus.add(subtasks.get(idSubtask).getStatus());
         }
-        if(allStatus.isEmpty() || allStatus.equals("NEW")) {
-            epic.setStatus("NEW");
+        if(allStatus.isEmpty()) {
+            epic.setStatus(TaskStatus.NEW);
             return;
+        } else if (allStatus.size() == 1) {
+            if(allStatus.contains(TaskStatus.NEW)) {
+                epic.setStatus(TaskStatus.NEW);
+                return;
+            } else if (allStatus.contains(TaskStatus.DONE)) {
+                epic.setStatus(TaskStatus.DONE);
+                return;
+            }
         }
-        if(allStatus.equals("DONE")) {
-            epic.setStatus("DONE");
-            return;
-        }
-        epic.setStatus("IN_PROGRESS");
+        epic.setStatus(TaskStatus.IN_PROGRESS);
     }
 
     @Override

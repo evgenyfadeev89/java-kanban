@@ -1,16 +1,11 @@
-package ru.yandex.practicum.taskmanager.Files;
+package ru.yandex.practicum.taskmanager.files;
 
 
 public class Subtask extends Task {
     protected int epicId;
 
-    public Subtask(int id, String name, String description, String status, int epicId) {
-        super(id, name, description, status);
-        this.epicId = epicId;
-    }
-
-    public Subtask(String name, String description, String status, int epicId) {
-        super(name, description, status);
+    public Subtask(String name, String description, int epicId) {
+        super(name, description);
         this.epicId = epicId;
     }
 

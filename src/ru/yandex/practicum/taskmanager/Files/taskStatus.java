@@ -1,6 +1,6 @@
-package ru.yandex.practicum.taskmanager.Files;
+package ru.yandex.practicum.taskmanager.files;
 
-public enum taskStatus {
+public enum TaskStatus {
     NEW,
     IN_PROGRESS,
     DONE
