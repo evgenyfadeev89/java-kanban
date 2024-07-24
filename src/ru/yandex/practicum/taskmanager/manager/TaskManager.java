@@ -15,9 +15,9 @@ public class TaskManager implements ITaskManager {
     private int generateId() {
         return ++id;
     }
-    public int getId() {
-        return id;
-    }
+    //public int getId() {
+    //    return id;
+    //}
 
     @Override
     public ArrayList<Task> getTasks() {
@@ -64,7 +64,7 @@ public class TaskManager implements ITaskManager {
 
     @Override
     public int addNewTask (Task task) {
-        task.setId(getId());
+        task.setId(id);
         tasks.put(task.getId(), task);
         generateId(); //добавил вызов на увеличение при создании задач
         return task.getId();
@@ -72,7 +72,7 @@ public class TaskManager implements ITaskManager {
 
     @Override
     public int addNewEpic (Epic epic) {
-        epic.setId(getId());
+        epic.setId(id);
         epics.put(epic.getId(), epic);
         generateId();
         return epic.getId();
@@ -80,7 +80,7 @@ public class TaskManager implements ITaskManager {
 
     @Override
      public int addNewSubtask(Subtask subtask) {
-        subtask.setId(getId());
+        subtask.setId(id);
         Epic epic = getEpic(subtask.getEpicId());
         if(epic == null) {
             System.out.println("такого эпика нет" + subtask.getEpicId());
