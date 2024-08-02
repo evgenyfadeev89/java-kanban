@@ -18,6 +18,9 @@ public class Epic extends Task {
         return subtaskIds;
     }
 
+    public boolean isEpic() {
+        return true;
+    }
 
     @Override
     public String toString() {

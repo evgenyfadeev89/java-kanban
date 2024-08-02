@@ -8,7 +8,9 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Тест!");
 
-        TaskManager manager = new TaskManager();
+        TaskManager manager = new InMemoryTaskManager();
+        HistoryManager histManage = Managers.getDefaultHistory();
+
 
         //создание
         Task task1 = new Task("Task_1", "Task_1 description");
@@ -30,14 +32,6 @@ public class Main {
         final Integer subtaskId2 = manager.addNewSubtask(subtask2);
         final Integer subtaskId3 = manager.addNewSubtask(subtask3);
 
-        System.out.println("Список Task");
-        System.out.println(manager.getTasks());
-
-        System.out.println("Список Epic");
-        System.out.println(manager.getEpics());
-
-        System.out.println("Список Subtask");
-        System.out.println(manager.getSubtasks());
 
         //обновление
         final Task task = manager.getTask(taskId2);
@@ -58,13 +52,6 @@ public class Main {
         manager.updateSubtask(subtask);
         System.out.println("Change status: Subtask7 DONE -> NEW");
 
-        System.out.println("Список Subtask");
-        System.out.println(manager.getSubtasks());
-
-        System.out.println("Эпики");
-        for(Epic e: manager.getEpics()) {
-            System.out.println(e);
-        }
 
         //Удаление
         System.out.println("Удаляем элементы");
@@ -84,5 +71,13 @@ public class Main {
         for(Epic e: manager.getEpics()) {
             System.out.println(e);
         }
+
+
+        manager.getSubtask(subtaskId2);
+        manager.getSubtask(subtaskId1);
+        manager.getSubtask(subtaskId3);
+
+        System.out.println("Общий вывод всего");
+        manager.printAllTasks(manager);
     }
 }
