@@ -6,10 +6,10 @@ import java.util.List;
 import ru.yandex.practicum.taskmanager.files.*;
 
 public interface TaskManager {
-    ArrayList<Task> getTasks();
-    ArrayList<Epic> getEpics();
-    ArrayList<Subtask> getSubtasks();
-    ArrayList<Subtask> getEpicSubtasks (int epicId);
+    List<Task> getTasks();
+    List<Epic> getEpics();
+    List<Subtask> getSubtasks();
+    List<Subtask> getEpicSubtasks (int epicId);
 
     Task getTask(int id);
 

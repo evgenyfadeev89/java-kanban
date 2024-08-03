@@ -7,7 +7,7 @@ import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager{
 
-    protected int historyCntPosition = 0;
+    //protected int historyCntPosition = 0;
     protected final List<Task> viewTasks = new ArrayList<>(10);
 
     @Override
@@ -15,16 +15,10 @@ public class InMemoryHistoryManager implements HistoryManager{
         if (task == null) {
             return;
         }
-        if (historyCntPosition == 10) {
-            historyCntPosition = 0;
+        if (viewTasks.size() == 10) {
+            viewTasks.remove(0);
         }
-
-        try {
-            viewTasks.set(historyCntPosition, task); //если элемента нет в списке - ловим исключение
-        } catch (IndexOutOfBoundsException e) {
-            viewTasks.add(historyCntPosition, task);
-        }
-        ++historyCntPosition;
+        viewTasks.add(task);
     };
 
     @Override

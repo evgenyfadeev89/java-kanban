@@ -6,9 +6,9 @@ import ru.yandex.practicum.taskmanager.files.*;
 
 public class InMemoryTaskManager implements TaskManager {
     private int id = 1;
-    protected final HashMap<Integer, Task> tasks = new HashMap<>();
-    protected final HashMap<Integer, Subtask> subtasks = new HashMap<>();
-    protected final HashMap<Integer, Epic> epics = new HashMap<>();
+    protected final Map<Integer, Task> tasks = new HashMap<>();
+    protected final Map<Integer, Subtask> subtasks = new HashMap<>();
+    protected final Map<Integer, Epic> epics = new HashMap<>();
 
     private final HistoryManager historyManager = Managers.getDefaultHistory();
 
@@ -47,21 +47,18 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTask(int id) {
         historyManager.add(tasks.get(id));
-        //viewTasks.add(tasks.get(id));
         return tasks.get(id);
     }
 
     @Override
     public Subtask getSubtask(int id) {
         historyManager.add(subtasks.get(id));
-        //viewTasks.add(subtasks.get(id));
         return subtasks.get(id);
     }
 
     @Override
     public Epic getEpic(int id) {
         historyManager.add(epics.get(id));
-        //viewTasks.add(epics.get(id));
         return epics.get(id);
     }
 
