@@ -75,7 +75,7 @@ class InMemoryTaskManagerTest {
         Task task2 =  taskManagerStatus.getTask(taskId);
         task2.setStatus(TaskStatus.DONE);
         taskManagerStatus.updateTask(task2);
-        histToControl.add(taskManagerStatus.getTask(task2.getId()));
+        histToControl.add(0,taskManagerStatus.getTask(task2.getId()));
 
         /*Проверка обновления статуса таски*/
         assertEquals(task, task2, "Задачи не совпадают.");
@@ -84,7 +84,7 @@ class InMemoryTaskManagerTest {
         Task task3 = new Task("Test addNewTask3", "Test addNewTask3 description");
         final int taskId3 = taskManagerStatus.addNewTask(task3);
         taskManagerStatus.getTask(taskId3);
-        histToControl.add(taskManagerStatus.getTask(taskId3));
+        histToControl.add(0,taskManagerStatus.getTask(taskId3));
 
         /*Проверка работы истории до удаления таски*/
         List<Task> histBeforeDel = taskManagerStatus.getHistory();
