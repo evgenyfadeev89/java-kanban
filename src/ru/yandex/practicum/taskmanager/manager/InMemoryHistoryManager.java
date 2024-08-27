@@ -2,13 +2,9 @@ package ru.yandex.practicum.taskmanager.manager;
 
 import ru.yandex.practicum.taskmanager.files.Task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
+import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
-
 
     private static class Node {
         Task task;
@@ -30,18 +26,8 @@ public class InMemoryHistoryManager implements HistoryManager {
     private final Map<Integer, Node> nodeMap = new HashMap<>();
     private Node first;
     private Node last;
+    private ArrayList<Task> viewTasks = new ArrayList<>();
 
-    private ArrayList<Task> getTasks() {
-        ArrayList<Task> viewTasks = new ArrayList<>();
-        Node node = first; //указываем точку отсчета для итерации по связанному списку
-
-        while (node != null) {
-            viewTasks.add(node.task);
-            node = node.next;
-        }
-
-        return viewTasks;
-    }
 
     private void linkLast(Task task) {
         final Node newNode = new Node(task, last, null);
@@ -64,6 +50,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     @Override
     public void add(Task task) {
         remove(task.getId());
+        viewTasks.remove(task);
 
         if (nodeMap.isEmpty()) {
             linkFirst(task);
@@ -74,20 +61,23 @@ public class InMemoryHistoryManager implements HistoryManager {
             linkLast(task);
         }
         nodeMap.put(task.getId(), last);
+        viewTasks.add(0, task);
     }
 
     @Override
     public List<Task> getHistory() {
-        return getTasks();
+        return viewTasks;
     }
 
     @Override
     public void remove(int id) {
         final Node node = nodeMap.remove(id);
+
         if (node == null || (node.prev == null && node.next == null)) {
             return;
         }
 
+        viewTasks.remove(node.task);
         if (node.prev == null && node.next != null) {               //проверяем, что в списке не один элемент
             // 1. Удаление первого элемента
             first = node.next;
