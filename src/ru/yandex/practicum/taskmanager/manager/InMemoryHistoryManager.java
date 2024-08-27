@@ -49,7 +49,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
         oldLast.next = newNode;
         newNode.prev = oldLast;
-        nodeMap.put(oldLast.task.getId(),oldLast);
+        nodeMap.put(oldLast.task.getId(), oldLast);
         last = newNode;
     }
 

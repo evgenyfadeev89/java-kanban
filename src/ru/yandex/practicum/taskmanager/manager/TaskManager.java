@@ -7,9 +7,12 @@ import ru.yandex.practicum.taskmanager.files.*;
 
 public interface TaskManager {
     List<Task> getTasks();
+
     List<Epic> getEpics();
+
     List<Subtask> getSubtasks();
-    List<Subtask> getEpicSubtasks (int epicId);
+
+    List<Subtask> getEpicSubtasks(int epicId);
 
     Task getTask(int id);
 

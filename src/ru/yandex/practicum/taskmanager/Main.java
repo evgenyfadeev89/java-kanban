@@ -42,7 +42,7 @@ public class Main {
         manager.updateTask(task);
         System.out.println("Change status: Task2 NEW -> DONE");
         System.out.println("Задачи:");
-        for (Task t: manager.getTasks()) {
+        for (Task t : manager.getTasks()) {
             System.out.println(t);
         }
 
@@ -63,19 +63,19 @@ public class Main {
         //Удаление
         System.out.println("Удаляем элементы");
         manager.deleteTask(2);
-        for (Task t: manager.getTasks()) {
+        for (Task t : manager.getTasks()) {
             System.out.println(t);
         }
 
         manager.deleteSubtask(subtaskId2);
         System.out.println(manager.getSubtasks());
-        for (Epic e: manager.getEpics()) {
+        for (Epic e : manager.getEpics()) {
             System.out.println(e);
         }
 
         manager.deleteEpic(epicId1);
         System.out.println(manager.getSubtasks());
-        for (Epic e: manager.getEpics()) {
+        for (Epic e : manager.getEpics()) {
             System.out.println(e);
         }
 
