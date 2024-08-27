@@ -2,6 +2,8 @@ package ru.yandex.practicum.taskmanager.manager;
 
 import ru.yandex.practicum.taskmanager.files.*;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,7 +16,6 @@ class InMemoryTaskManagerTest {
     void addNewTask() {
         Task task = new Task("Test addNewTask", "Test addNewTask description");
         final int taskId = taskManager.addNewTask(task);
-
         final Task savedTask = taskManager.getTask(taskId);
 
         assertNotNull(savedTask, "Задача не найдена.");
@@ -31,15 +32,7 @@ class InMemoryTaskManagerTest {
     void addNewEpic() {
         Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description");
         final int epicId = taskManager.addNewEpic(epic);
-
         final Epic savedEpic = taskManager.getEpic(epicId);
-
-        /*
-        Тест на добавление эпика в самого себя невозможен, тк на вход метода добавления Сабтаск в Эпик стоит тип задачи Сабтаск
-        taskManager.addNewSubtask(epic);
-        В таком случае Idea выдаст сама ошибку и не даст скомпилировать
-        */
-
 
         assertNotNull(savedEpic, "Эпик не найдена.");
         assertEquals(epic, savedEpic, "Эпики не совпадают.");
@@ -53,13 +46,6 @@ class InMemoryTaskManagerTest {
 
     @Test
     void addNewSubTask() {
-
-        /*
-        "проверьте, что объект Subtask нельзя сделать своим же эпиком"
-
-        Эту проверку сделать так же не получится, тк ID Сабтаски генерится при создании
-         */
-
         Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description");
         final int epicId = taskManager.addNewEpic(epic);
 
@@ -80,23 +66,38 @@ class InMemoryTaskManagerTest {
 
     @Test
     void HistoryManagerTest () {
-
         final TaskManager taskManagerStatus = new InMemoryTaskManager();
+        List<Task> histToControl = new ArrayList<>();
 
         Task task = new Task("Test addNewTask", "Test addNewTask description");
         final int taskId = taskManagerStatus.addNewTask(task);
 
         Task task2 =  taskManagerStatus.getTask(taskId);
-        taskManagerStatus.addNewTask(task2);
-
         task2.setStatus(TaskStatus.DONE);
         taskManagerStatus.updateTask(task2);
+        histToControl.add(taskManagerStatus.getTask(task2.getId()));
 
-        Task hist = taskManagerStatus.getHistory().get(0);
-
-        assertNotNull(hist, "Задачи не возвращаются.");
+        /*Проверка обновления статуса таски*/
         assertEquals(task, task2, "Задачи не совпадают.");
-        assertEquals(task, hist, "Задачи совпадают.");
+        assertEquals(task, task2, "Задачи совпадают.");
+
+        Task task3 = new Task("Test addNewTask3", "Test addNewTask3 description");
+        final int taskId3 = taskManagerStatus.addNewTask(task3);
+        taskManagerStatus.getTask(taskId3);
+        histToControl.add(taskManagerStatus.getTask(taskId3));
+
+        /*Проверка работы истории до удаления таски*/
+        List<Task> histBeforeDel = taskManagerStatus.getHistory();
+        assertNotNull(histBeforeDel, "Задачи не возвращаются.");
+        assertEquals(histToControl, histBeforeDel, "Списки в истории не совпадают.");
+        assertEquals(histToControl, histBeforeDel, "Списки в истории совпадают.");
+
+        /*Проверка работы истории после удаления таски*/
+        taskManagerStatus.deleteTask(taskId);
+        List<Task> hist = taskManagerStatus.getHistory();
+        histToControl.remove(task);
+        assertEquals(histToControl, hist, "Списки в истории не совпадают.");
+        assertEquals(histToControl, hist, "Списки в истории совпадают.");
 
     }
 }
