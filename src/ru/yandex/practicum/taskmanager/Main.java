@@ -9,7 +9,6 @@ public class Main {
         System.out.println("Тест!");
 
         TaskManager manager = new InMemoryTaskManager();
-        HistoryManager histManage = Managers.getDefaultHistory();
 
 
         //создание
@@ -20,18 +19,22 @@ public class Main {
 
         Epic epic1 = new Epic("Epic_1", "Epic_1 description");
         Epic epic2 = new Epic("Epic_2", "Epic_2 description");
-        Epic epic8 = new Epic("Epic_2", "Epic_2 description");
+        Epic epic8 = new Epic("Epic_3", "Epic_3 description");
         final int epicId1 = manager.addNewEpic(epic1);
         final int epicId2 = manager.addNewEpic(epic2);
         final int epicId8 = manager.addNewEpic(epic8);
 
         Subtask subtask1 = new Subtask("Subtask_1-1", "Subtask_1 description", epicId1);
-        Subtask subtask2 = new Subtask("Subtask_2-1", "Subtask_1 description", epicId1);
-        Subtask subtask3 = new Subtask("Subtask_3-2", "Subtask_1 description", epicId2);
+        Subtask subtask2 = new Subtask("Subtask_2-1", "Subtask_2 description", epicId1);
+        Subtask subtask3 = new Subtask("Subtask_3-2", "Subtask_3 description", epicId2);
+
+
         final Integer subtaskId1 = manager.addNewSubtask(subtask1);
         final Integer subtaskId2 = manager.addNewSubtask(subtask2);
         final Integer subtaskId3 = manager.addNewSubtask(subtask3);
 
+        System.out.println("Общий вывод всего");
+        manager.printAllTasks(manager);
 
         //обновление
         final Task task = manager.getTask(taskId2);
@@ -47,18 +50,22 @@ public class Main {
         subtask.setStatus(TaskStatus.DONE);
         manager.updateSubtask(subtask);
         System.out.println("Change status: Subtask6 NEW -> DONE");
+
         subtask = manager.getSubtask(subtaskId3);
         subtask.setStatus(TaskStatus.NEW);
         manager.updateSubtask(subtask);
         System.out.println("Change status: Subtask7 DONE -> NEW");
 
+        System.out.println("*".repeat(20) + "Выводим историю" + "*".repeat(20));
+        System.out.println(manager.getHistory());
+        System.out.println("*".repeat(55));
 
         //Удаление
         System.out.println("Удаляем элементы");
         manager.deleteTask(2);
         for(Task t: manager.getTasks()) {
             System.out.println(t);
-        };
+        }
 
         manager.deleteSubtask(subtaskId2);
         System.out.println(manager.getSubtasks());
