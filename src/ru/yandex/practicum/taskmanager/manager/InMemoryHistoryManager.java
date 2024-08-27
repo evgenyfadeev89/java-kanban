@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 
-public class InMemoryHistoryManager implements HistoryManager{
+public class InMemoryHistoryManager implements HistoryManager {
 
 
     private static class Node {
@@ -15,7 +15,7 @@ public class InMemoryHistoryManager implements HistoryManager{
         Node prev;
         Node next;
 
-        private Node (Task task, Node prev, Node next) {
+        private Node(Task task, Node prev, Node next) {
             this.task = task;
             this.prev = prev;
             this.next = next;
@@ -35,7 +35,7 @@ public class InMemoryHistoryManager implements HistoryManager{
         ArrayList<Task> viewTasks = new ArrayList<>();
         Node node = first; //указываем точку отсчета для итерации по связанному списку
 
-        while(node != null) {
+        while (node != null) {
             viewTasks.add(node.task);
             node = node.next;
         }
@@ -43,7 +43,7 @@ public class InMemoryHistoryManager implements HistoryManager{
         return viewTasks;
     }
 
-    private void linkLast (Task task) {
+    private void linkLast(Task task) {
         final Node newNode = new Node(task, last, null);
         final Node oldLast = nodeMap.remove(last.task.getId());
 
@@ -53,7 +53,7 @@ public class InMemoryHistoryManager implements HistoryManager{
         last = newNode;
     }
 
-    private Node linkFirst (Task task) {
+    private Node linkFirst(Task task) {
         final Node node = new Node(task, null, null);
         first = node;
         last = node;
@@ -74,12 +74,12 @@ public class InMemoryHistoryManager implements HistoryManager{
             linkLast(task);
         }
         nodeMap.put(task.getId(), last);
-    };
+    }
 
     @Override
     public List<Task> getHistory() {
         return getTasks();
-    };
+    }
 
     @Override
     public void remove(int id) {
