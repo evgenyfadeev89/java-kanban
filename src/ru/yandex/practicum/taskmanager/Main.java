@@ -2,14 +2,17 @@ package ru.yandex.practicum.taskmanager;
 
 import ru.yandex.practicum.taskmanager.manager.*;
 import ru.yandex.practicum.taskmanager.files.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         System.out.println("Тест!");
 
-        TaskManager manager = new InMemoryTaskManager();
-
+        TaskManager manager = Managers.getDefault();
 
         //создание
         Task task1 = new Task("Task_1", "Task_1 description");
@@ -86,5 +89,31 @@ public class Main {
 
         System.out.println("Общий вывод всего");
         manager.printAllTasks(manager);
+
+
+        //для тестов FileBackedTaskManager
+        System.out.println("*".repeat(60));
+        File file = new File("resources/task.csv");
+        TaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
+        System.out.println("Проверка наполнения fileBackedTaskManager");
+        fileBackedTaskManager.printAllTasks(fileBackedTaskManager);
+
+        TaskManager fileBackedTaskManagerAfterLoad = FileBackedTaskManager.loadFromFile(file);
+        System.out.println("*".repeat(60));
+        System.out.println("Проверка наполнения fileBackedTaskManagerAfterLoad");
+        fileBackedTaskManagerAfterLoad.printAllTasks(fileBackedTaskManagerAfterLoad);
+
+        Path testEmptyManager = Files.createTempFile("testEmptyManager", ".csv");
+        File testFile = new File(testEmptyManager.toUri());
+        TaskManager fileBackedTaskManagerTest = new FileBackedTaskManager(testFile);
+        System.out.println("*".repeat(60));
+        System.out.println("Проверка наполнения fileBackedTaskManagerTest");
+        fileBackedTaskManagerTest.printAllTasks(fileBackedTaskManagerTest);
+
+        TaskManager fileBackedTaskManagerTestAfterLoad = FileBackedTaskManager.loadFromFile(testFile);
+        System.out.println("*".repeat(60));
+        System.out.println("Проверка наполнения fileBackedTaskManagerTestAfterLoad");
+        fileBackedTaskManagerTestAfterLoad.printAllTasks(fileBackedTaskManagerTestAfterLoad);
+
     }
 }

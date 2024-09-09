@@ -6,11 +6,21 @@ public class Task {
     protected String name;
     protected TaskStatus status;
     protected String description;
+    protected TaskType taskType;
 
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
         this.status = TaskStatus.NEW;
+        this.taskType = TaskType.TASK;
+    }
+
+    public Task(int id, TaskType taskType, String name, TaskStatus status, String description) {
+        this.id = id;
+        this.taskType = taskType;
+        this.name = name;
+        this.status = status;
+        this.description = description;
     }
 
 
@@ -36,6 +46,14 @@ public class Task {
 
     public void setStatus(TaskStatus status) {
         this.status = status;
+    }
+
+    public TaskType getTaskType() {
+        return this.taskType;
+    }
+
+    public Object getEpicId() {
+        return null;
     }
 
     public String getDescription() {
@@ -68,6 +86,7 @@ public class Task {
                 ", description='" + description + "'" +
                 ", id=" + id +
                 ", status='" + status + "'" +
+                ", type=" + taskType +
                 "}";
     }
 }
