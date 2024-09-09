@@ -8,6 +8,7 @@ import ru.yandex.practicum.taskmanager.files.*;
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File file;
     public static CSVTaskFormat csvTaskFormator = new CSVTaskFormat();
+
     public FileBackedTaskManager(File file) {
         this.file = file;
     }
@@ -16,13 +17,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public static FileBackedTaskManager loadFromFile(File file) {
         final FileBackedTaskManager taskManager = new FileBackedTaskManager(file);
 
-        try(BufferedReader reader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
             String line;
             Task task;
             int id = 1;
 
             while ((line = reader.readLine()) != null) {
-                if(line.equals("id,type,name,status,description,epic")) {
+                if (line.equals("id,type,name,status,description,epic")) {
                     continue;
                 }
 
@@ -30,7 +31,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
                 taskManager.setId(task.getId());
 
-                if(id < task.getId()) {
+                if (id < task.getId()) {
                     id = task.getId() + 1;
                 }
 
@@ -67,21 +68,21 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     protected void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
             writer.write("id,type,name,status,description,epic" + "\n");
-            for(Task task: getTasks()) {
+            for (Task task: getTasks()) {
                 writer.write(csvTaskFormator.toString(task) + "," + "\n");
-                if(task.equals(null)) {
+                if (task.equals(null)) {
                     throw new ManagerSaveException("Отсутсвтуют задачи для сохранения");
                 }
             }
-            for(Epic epic: getEpics()) {
+            for (Epic epic: getEpics()) {
                 writer.write(csvTaskFormator.toString(epic) + "," + "\n");
-                if(epic.equals(null)) {
+                if (epic.equals(null)) {
                     throw new ManagerSaveException("Отсутсвтуют задачи для сохранения");
                 }
             }
-            for(Subtask subtask: getSubtasks()) {
+            for (Subtask subtask: getSubtasks()) {
                 writer.write(csvTaskFormator.toString(subtask) + "," + "\n");
-                if(subtask.equals(null)) {
+                if (subtask.equals(null)) {
                     throw new ManagerSaveException("Отсутсвтуют задачи для сохранения");
                 }
             }
@@ -93,6 +94,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     class ManagerSaveException extends Exception {
         public ManagerSaveException() {
         }
+
         public ManagerSaveException(String message) {
             super(message);
         }
