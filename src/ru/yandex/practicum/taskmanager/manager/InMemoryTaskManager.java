@@ -78,7 +78,7 @@ public class InMemoryTaskManager implements TaskManager {
     public int addNewTask(Task task) {
         task.setId(id);
         tasks.put(task.getId(), task);
-        generateId(); //добавил вызов на увеличение при создании задач
+        generateId();
         return task.getId();
     }
 
@@ -97,7 +97,7 @@ public class InMemoryTaskManager implements TaskManager {
             return -1;
         }
         subtask.setId(id);
-        Epic epic = getEpic((Integer) subtask.getEpicId());
+        Epic epic = getEpic(subtask.getEpicId());
         if (epic == null) {
             System.out.println("такого эпика нет" + subtask.getEpicId());
             return -1;
@@ -113,7 +113,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateEpicStatus(Subtask subtask) {
         Set<TaskStatus> allStatus = new HashSet<>();
-        Epic epic = getEpic((Integer) subtask.getEpicId());
+        Epic epic = getEpic(subtask.getEpicId());
         for (int idSubtask : epic.getSubtaskIds()) {
             allStatus.add(subtasks.get(idSubtask).getStatus());
         }
@@ -190,12 +190,12 @@ public class InMemoryTaskManager implements TaskManager {
             }
         }
         epics.remove(idEpic);
-        historyManager.remove(idEpic);//добавить реализацию удаления из истории епика
+        historyManager.remove(idEpic);
     }
 
     @Override
     public void deleteSubtask(int idSubtask) {
-        int idEpic = (Integer) getSubtask(idSubtask).getEpicId();
+        int idEpic = getSubtask(idSubtask).getEpicId();
         subtasks.remove(idSubtask);
         epics.get(idEpic).getSubtaskIds().remove((Object) idSubtask);
         historyManager.remove(idSubtask);//добавить реализацию удаления из истории сабтаски

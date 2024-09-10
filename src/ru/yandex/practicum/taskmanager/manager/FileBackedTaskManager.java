@@ -7,7 +7,6 @@ import ru.yandex.practicum.taskmanager.files.*;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File file;
-    public static CSVTaskFormat csvTaskFormator = new CSVTaskFormat();
 
     public FileBackedTaskManager(File file) {
         this.file = file;
@@ -27,7 +26,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     continue;
                 }
 
-                task = csvTaskFormator.taskFromString(line);
+                task = CSVTaskFormat.taskFromString(line);
 
                 taskManager.setId(task.getId());
 
@@ -65,38 +64,29 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return taskManager;
     }
 
-    protected void save() {
+    private void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
             writer.write("id,type,name,status,description,epic" + "\n");
             for (Task task: getTasks()) {
-                writer.write(csvTaskFormator.toString(task) + "," + "\n");
+                writer.write(CSVTaskFormat.toString(task) + "," + "\n");
                 if (task.equals(null)) {
-                    throw new ManagerSaveException("Отсутсвтуют задачи для сохранения");
+                    throw new ManagerSaveException("Отсутствуют задачи для сохранения");
                 }
             }
             for (Epic epic: getEpics()) {
-                writer.write(csvTaskFormator.toString(epic) + "," + "\n");
+                writer.write(CSVTaskFormat.toString(epic) + "," + "\n");
                 if (epic.equals(null)) {
-                    throw new ManagerSaveException("Отсутсвтуют задачи для сохранения");
+                    throw new ManagerSaveException("Отсутствуют задачи для сохранения");
                 }
             }
             for (Subtask subtask: getSubtasks()) {
-                writer.write(csvTaskFormator.toString(subtask) + "," + "\n");
+                writer.write(CSVTaskFormat.toString(subtask) + "," + "\n");
                 if (subtask.equals(null)) {
-                    throw new ManagerSaveException("Отсутсвтуют задачи для сохранения");
+                    throw new ManagerSaveException("Отсутствуют задачи для сохранения");
                 }
             }
         } catch (ManagerSaveException | IOException e) {
             System.out.println(e.getMessage());
-        }
-    }
-
-    class ManagerSaveException extends Exception {
-        public ManagerSaveException() {
-        }
-
-        public ManagerSaveException(String message) {
-            super(message);
         }
     }
 

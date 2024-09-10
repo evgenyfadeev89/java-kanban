@@ -12,7 +12,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         System.out.println("Тест!");
 
-        TaskManager manager = Managers.getDefault();
+        TaskManager manager = Managers.getDefaultFileBacked();
 
         //создание
         Task task1 = new Task("Task_1", "Task_1 description");

@@ -5,7 +5,10 @@ import java.io.File;
 public class Managers {
 
     public static TaskManager getDefault() {
-        //return new InMemoryTaskManager();
+        return new InMemoryTaskManager();
+    }
+
+    public static TaskManager getDefaultFileBacked() {
         return new FileBackedTaskManager(new File("resources/task.csv"));
     }
 

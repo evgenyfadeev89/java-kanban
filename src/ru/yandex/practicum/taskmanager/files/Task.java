@@ -7,6 +7,7 @@ public class Task {
     protected TaskStatus status;
     protected String description;
     protected TaskType taskType;
+    protected int epicId;
 
     public Task(String name, String description) {
         this.name = name;
@@ -52,8 +53,8 @@ public class Task {
         return this.taskType;
     }
 
-    public Object getEpicId() {
-        return null;
+    public int getEpicId() {
+            return epicId;
     }
 
     public String getDescription() {
