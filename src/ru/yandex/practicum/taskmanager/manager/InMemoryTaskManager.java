@@ -16,6 +16,10 @@ public class InMemoryTaskManager implements TaskManager {
         return ++id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @Override
     public ArrayList<Task> getTasks() {
         ArrayList<Task> taskArrayList = new ArrayList<>(tasks.values());
@@ -59,7 +63,6 @@ public class InMemoryTaskManager implements TaskManager {
             historyManager.add(subtasks.get(id));
         }
         return subtasks.get(id);
-
     }
 
     @Override
@@ -75,7 +78,7 @@ public class InMemoryTaskManager implements TaskManager {
     public int addNewTask(Task task) {
         task.setId(id);
         tasks.put(task.getId(), task);
-        generateId(); //добавил вызов на увеличение при создании задач
+        generateId();
         return task.getId();
     }
 
@@ -187,7 +190,7 @@ public class InMemoryTaskManager implements TaskManager {
             }
         }
         epics.remove(idEpic);
-        historyManager.remove(idEpic);//добавить реализацию удаления из истории епика
+        historyManager.remove(idEpic);
     }
 
     @Override

@@ -1,16 +1,17 @@
-package ru.yandex.practicum.taskmanager.manager;
-
-import ru.yandex.practicum.taskmanager.files.*;
 import org.junit.jupiter.api.Test;
-
+import ru.yandex.practicum.taskmanager.files.*;
+import ru.yandex.practicum.taskmanager.manager.InMemoryTaskManager;
+import ru.yandex.practicum.taskmanager.manager.TaskManager;
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 
 class InMemoryTaskManagerTest {
-
     final TaskManager taskManager = new InMemoryTaskManager();
+
+    InMemoryTaskManagerTest() {
+    }
 
     @Test
     void addNewTask() {
@@ -65,7 +66,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void HistoryManagerTest () {
+    void HistoryManagerTest() {
         final TaskManager taskManagerStatus = new InMemoryTaskManager();
         List<Task> histToControl = new ArrayList<>();
 
@@ -98,6 +99,5 @@ class InMemoryTaskManagerTest {
         histToControl.remove(task);
         assertEquals(histToControl, hist, "Списки в истории не совпадают.");
         assertEquals(histToControl, hist, "Списки в истории совпадают.");
-
     }
 }
