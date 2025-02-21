@@ -2,19 +2,26 @@ package ru.yandex.practicum.taskmanager.files;
 
 
 public class Subtask extends Task {
-    protected int epicId;
+    protected TaskType taskType;
 
     public Subtask(String name, String description, int epicId) {
         super(name, description);
         this.epicId = epicId;
+        this.taskType = TaskType.SUBTASK;
     }
 
-    public int getEpicId() {
-        return epicId;
+    public Subtask(int id, TaskType taskType, String name, TaskStatus status, String description, int epicId) {
+        super(id, taskType, name, status, description);
+        this.epicId = epicId;
+        this.taskType = TaskType.SUBTASK;
     }
 
     public boolean isEpic() {
         return false;
+    }
+
+    public TaskType getTaskType() {
+        return this.taskType;
     }
 
     @Override
@@ -25,6 +32,7 @@ public class Subtask extends Task {
                 ", id=" + id +
                 ", status='" + status + "'" +
                 ", epicId=" + epicId +
+                ", type=" + taskType +
                 "}";
     }
 }
