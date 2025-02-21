@@ -1,6 +1,11 @@
 package ru.yandex.practicum.taskmanager.files;
 
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Task {
     protected int id;
     protected String name;
@@ -8,6 +13,9 @@ public class Task {
     protected String description;
     protected TaskType taskType;
     protected int epicId;
+    protected Duration duration = Duration.ZERO;
+    protected LocalDateTime startTime;
+    public DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"); //поменять "yyyy-MM-dd HH:mm"
 
     public Task(String name, String description) {
         this.name = name;
@@ -16,12 +24,32 @@ public class Task {
         this.taskType = TaskType.TASK;
     }
 
-    public Task(int id, TaskType taskType, String name, TaskStatus status, String description) {
+    public Task(int id,
+                TaskType taskType,
+                String name,
+                TaskStatus status,
+                String description) {
         this.id = id;
         this.taskType = taskType;
         this.name = name;
         this.status = status;
         this.description = description;
+    }
+
+    public Task(int id,
+                TaskType taskType,
+                String name,
+                TaskStatus status,
+                String description,
+                Duration duration,
+                String startTime) {
+        this.id = id;
+        this.taskType = taskType;
+        this.name = name;
+        this.status = status;
+        this.description = description;
+        this.duration = duration;
+        this.startTime = startTime != null ? LocalDateTime.parse(startTime, formatter) : null;
     }
 
 
@@ -54,7 +82,7 @@ public class Task {
     }
 
     public int getEpicId() {
-            return epicId;
+        return epicId;
     }
 
     public String getDescription() {
@@ -63,6 +91,29 @@ public class Task {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getEndTime() {
+        if (startTime == null || (duration == null || duration.isZero())) {
+            return null;
+        }
+        return startTime.plus(duration).format(formatter);
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = Duration.ofMinutes(duration);
+    }
+
+    public String getStartTime() {
+        return startTime != null ? startTime.format(formatter) : null;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime != null ? LocalDateTime.parse(startTime, formatter) : null;
     }
 
     @Override
@@ -88,6 +139,9 @@ public class Task {
                 ", id=" + id +
                 ", status='" + status + "'" +
                 ", type=" + taskType +
+                ", duration=" + duration.toSeconds() +
+                ", startTime=" + startTime + //(startTime != null ? startTime.format(formatter) : "null") +
+                //", endTime=" + endTime.format(formatter) +
                 "}";
     }
 }

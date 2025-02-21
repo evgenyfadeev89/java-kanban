@@ -1,6 +1,7 @@
 package ru.yandex.practicum.taskmanager.manager;
 
 import java.util.List;
+import java.util.Set;
 
 import ru.yandex.practicum.taskmanager.files.*;
 
@@ -27,6 +28,8 @@ public interface TaskManager {
 
     void updateEpicStatus(Subtask subtask);
 
+    void updateEpicTimeFields(int epicId);
+
     void updateTask(Task task); //next
 
     void updateEpic(Epic epic);
@@ -46,6 +49,10 @@ public interface TaskManager {
     void deleteSubtasks();
 
     List<Task> getHistory();
+
+    Set<Task> getPrioritizedTasks();
+
+    boolean findCrossTask (Task task);
 
     void printAllTasks(TaskManager manager);
 }

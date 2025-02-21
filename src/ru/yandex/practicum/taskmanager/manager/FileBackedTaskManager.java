@@ -2,6 +2,7 @@ package ru.yandex.practicum.taskmanager.manager;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Set;
 
 import ru.yandex.practicum.taskmanager.files.*;
 
@@ -22,7 +23,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             int id = 1;
 
             while ((line = reader.readLine()) != null) {
-                if (line.equals("id,type,name,status,description,epic")) {
+                if (line.equals("id,type,name,status,description,duration,startTime,endTime,epic")) {
                     continue;
                 }
 
@@ -43,15 +44,25 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                                                         task.getTaskType(),
                                                         task.getName(),
                                                         task.getStatus(),
-                                                        task.getDescription()));
-                        break;
+                                                        task.getDescription(),
+                                                        task.getDuration(),
+                                                        task.getStartTime(),
+//                                                        (task.getStartTime() != null ? task.getStartTime().format(task.formatter) :
+//                                                                task.getStartTime().toString()),
+//                                                        (task.getEndTime() != null ? task.getEndTime().format(task.formatter) :
+//                                                                task.getEndTime().toString())));
+                                                        task.getEndTime()));
+                                                        break;
                     case SUBTASK:
                         taskManager.addNewSubtask(new Subtask(task.getId(),
                                 task.getTaskType(),
                                 task.getName(),
                                 task.getStatus(),
                                 task.getDescription(),
-                                (int) task.getEpicId()));
+                                task.getDuration(),
+                                task.getStartTime(),
+//                                (task.getStartTime() != null ? task.getStartTime().format(task.formatter) : task.getStartTime().toString()),
+                                task.getEpicId()));
                         break;
                 }
 
@@ -66,7 +77,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
-            writer.write("id,type,name,status,description,epic" + "\n");
+            writer.write("id,type,name,status,description,duration,startTime,endTime,epic" + "\n");
             for (Task task: getTasks()) {
                 writer.write(CSVTaskFormat.toString(task) + "," + "\n");
                 if (task.equals(null)) {
@@ -139,6 +150,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
+    public void updateEpicTimeFields(int epicId) {
+        super.updateEpicTimeFields(epicId);
+        save();
+    }
+
+    @Override
     public void updateTask(Task task) {
         super.updateTask(task);
         save();
@@ -172,5 +189,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public void deleteSubtask(int idSubtask) {
         super.deleteSubtask(idSubtask);
         save();
+    }
+
+    @Override
+    public Set<Task> getPrioritizedTasks() {
+        Set<Task> sortedTaskSet = super.getPrioritizedTasks();
+//        save();
+        return sortedTaskSet;
     }
 }
