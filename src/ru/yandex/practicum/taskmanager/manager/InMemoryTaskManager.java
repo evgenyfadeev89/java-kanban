@@ -302,11 +302,11 @@ public class InMemoryTaskManager implements TaskManager {
             return false;
         }
 
-        return getPrioritizedTasks().stream().
-                filter(task1 -> !task1.equals(task))
+        return getPrioritizedTasks().stream()
+                .filter(task1 -> !task1.equals(task))
                 .anyMatch(task1 -> LocalDateTime.parse(task1.getEndTime(), formatter)
-                        .isAfter(LocalDateTime.parse(task.getStartTime(), formatter)) &
-                        LocalDateTime.parse(task.getEndTime(), formatter)
+                        .isAfter(LocalDateTime.parse(task.getStartTime(), formatter))
+                        & LocalDateTime.parse(task.getEndTime(), formatter)
                         .isAfter(LocalDateTime.parse(task1.getStartTime(), formatter)));
     }
 
