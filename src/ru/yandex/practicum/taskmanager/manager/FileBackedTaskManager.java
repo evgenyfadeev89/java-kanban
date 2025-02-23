@@ -2,7 +2,6 @@ package ru.yandex.practicum.taskmanager.manager;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Set;
 
 import ru.yandex.practicum.taskmanager.files.*;
 
@@ -13,7 +12,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         this.file = file;
     }
 
-    //Восстанавливает из файла менеджер + история просмотров
     public static FileBackedTaskManager loadFromFile(File file) {
         final FileBackedTaskManager taskManager = new FileBackedTaskManager(file);
 
@@ -23,7 +21,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             int id = 1;
 
             while ((line = reader.readLine()) != null) {
-                if (line.equals("id,type,name,status,description,duration,startTime,endTime,epic")) {
+                if (line.isEmpty() || line.equals("id,type,name,status,description,duration,startTime,endTime,epic")) {
                     continue;
                 }
 
@@ -41,18 +39,14 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                         break;
                     case EPIC:
                         taskManager.addNewEpic(new Epic(task.getId(),
-                                                        task.getTaskType(),
-                                                        task.getName(),
-                                                        task.getStatus(),
-                                                        task.getDescription(),
-                                                        task.getDuration(),
-                                                        task.getStartTime(),
-//                                                        (task.getStartTime() != null ? task.getStartTime().format(task.formatter) :
-//                                                                task.getStartTime().toString()),
-//                                                        (task.getEndTime() != null ? task.getEndTime().format(task.formatter) :
-//                                                                task.getEndTime().toString())));
-                                                        task.getEndTime()));
-                                                        break;
+                                task.getTaskType(),
+                                task.getName(),
+                                task.getStatus(),
+                                task.getDescription(),
+                                task.getDuration(),
+                                task.getStartTime(),
+                                task.getEndTime()));
+                        break;
                     case SUBTASK:
                         taskManager.addNewSubtask(new Subtask(task.getId(),
                                 task.getTaskType(),
@@ -61,7 +55,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                                 task.getDescription(),
                                 task.getDuration(),
                                 task.getStartTime(),
-//                                (task.getStartTime() != null ? task.getStartTime().format(task.formatter) : task.getStartTime().toString()),
                                 task.getEpicId()));
                         break;
                 }
@@ -71,59 +64,59 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         } catch (IOException e) {
             System.out.println("Ошибка считывания из файла" + e.getMessage());
         }
-
+//        taskManager.save();
         return taskManager;
     }
 
     private void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
             writer.write("id,type,name,status,description,duration,startTime,endTime,epic" + "\n");
-            for (Task task: getTasks()) {
-                writer.write(CSVTaskFormat.toString(task) + "," + "\n");
-                if (task.equals(null)) {
-                    throw new ManagerSaveException("Отсутствуют задачи для сохранения");
-                }
-            }
-            for (Epic epic: getEpics()) {
-                writer.write(CSVTaskFormat.toString(epic) + "," + "\n");
-                if (epic.equals(null)) {
-                    throw new ManagerSaveException("Отсутствуют задачи для сохранения");
-                }
-            }
-            for (Subtask subtask: getSubtasks()) {
-                writer.write(CSVTaskFormat.toString(subtask) + "," + "\n");
-                if (subtask.equals(null)) {
-                    throw new ManagerSaveException("Отсутствуют задачи для сохранения");
-                }
-            }
+            getTasks().stream()
+                    .peek(task -> {
+                        if (task == null) {
+                            throw new ManagerSaveException("Отсутствуют задачи для сохранения");
+                        }
+                    })
+                    .forEach(task -> {
+                        try {
+                            writer.write(CSVTaskFormat.toString(task) + "," + "\n");
+                        } catch (IOException e) {
+                            throw new ManagerSaveException("Ошибка записи в файл", e);
+                        }
+                    });
+            getEpics().stream()
+                    .peek(epic -> {
+                        if (epic == null) {
+                            throw new ManagerSaveException("Отсутствуют задачи для сохранения");
+                        }
+                    })
+                    .forEach(epic -> {
+                        try {
+                            writer.write(CSVTaskFormat.toString(epic) + "," + "\n");
+                        } catch (IOException e) {
+                            throw new ManagerSaveException("Ошибка записи в файл", e);
+                        }
+                    });
+            getSubtasks().stream()
+                    .peek(subtask -> {
+                        if (subtask == null) {
+                            throw new ManagerSaveException("Отсутствуют задачи для сохранения");
+                        }
+                    })
+                    .forEach(subtask -> {
+                        try {
+                            writer.write(CSVTaskFormat.toString(subtask) + "," + "\n");
+                        } catch (IOException e) {
+                            throw new ManagerSaveException("Ошибка записи в файл", e);
+                        }
+                    });
         } catch (ManagerSaveException | IOException e) {
             System.out.println(e.getMessage());
         }
     }
 
     @Override
-    public Task getTask(int id) {
-        final Task task = super.getTask(id);
-        save();
-        return task;
-    }
-
-    @Override
-    public Epic getEpic(int id) {
-        final Epic epic = super.getEpic(id);
-        save();
-        return epic;
-    }
-
-    @Override
-    public Subtask getSubtask(int id) {
-        final Subtask subtask = super.getSubtask(id);
-        save();
-        return subtask;
-    }
-
-    @Override
-    public int addNewTask(Task task) {
+    public int addNewTask(Task task) throws TimeCheckException {
         final int id = super.addNewTask(task);
         save();
         return id;
@@ -137,7 +130,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public int addNewSubtask(Subtask subtask) {
+    public int addNewSubtask(Subtask subtask) throws TimeCheckException {
         final int id = super.addNewSubtask(subtask);
         save();
         return id;
@@ -189,12 +182,5 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public void deleteSubtask(int idSubtask) {
         super.deleteSubtask(idSubtask);
         save();
-    }
-
-    @Override
-    public Set<Task> getPrioritizedTasks() {
-        Set<Task> sortedTaskSet = super.getPrioritizedTasks();
-//        save();
-        return sortedTaskSet;
     }
 }

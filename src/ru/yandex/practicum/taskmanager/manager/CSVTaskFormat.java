@@ -2,8 +2,6 @@ package ru.yandex.practicum.taskmanager.manager;
 
 import ru.yandex.practicum.taskmanager.files.*;
 
-import java.time.Duration;
-
 
 public class CSVTaskFormat {
     public static String toString(Task task) {
@@ -13,11 +11,9 @@ public class CSVTaskFormat {
                     task.getName() + "," +
                     task.getStatus() + "," +
                     task.getDescription() + "," +
-                    task.getDuration().toMinutes() + "," +
-//                    (task.getStartTime() != null ? task.getStartTime().format(task.formatter) : task.getStartTime()) + "," +
+                    task.getDuration() + "," +
                     task.getStartTime() + "," +
                     task.getEndTime() + "," +
-//                    (task.getEndTime() != null ? task.getEndTime().format(task.formatter) : task.getEndTime()) + "," +
                     task.getEpicId()
                     ;
         }
@@ -26,12 +22,9 @@ public class CSVTaskFormat {
                 task.getName() + "," +
                 task.getStatus() + "," +
                 task.getDescription() + "," +
-                task.getDuration().toMinutes() + "," +
-//                (task.getStartTime() != null ? task.getStartTime().format(task.formatter) : task.getStartTime()) + "," +
+                task.getDuration() + "," +
                 task.getStartTime() + "," +
                 task.getEndTime()
-//                (task.getStartTime() != null ? task.getStartTime().format(task.formatter) : task.getStartTime()) + "," +
-//                (task.getEndTime() != null ? task.getEndTime().format(task.formatter) : task.getEndTime())
                 ;
     }
 
@@ -43,9 +36,9 @@ public class CSVTaskFormat {
         final String name = String.valueOf(values[2]);
         final TaskStatus status = TaskStatus.valueOf(values[3]);
         final String description = String.valueOf(values[4]);
-        final Duration duration = Duration.ofMinutes(Integer.parseInt((values[5])));
-        final String startTime = String.valueOf(values[6]);
-        final String endTime = String.valueOf(values[7]);
+        final long duration = Integer.parseInt((values[5]));
+        final String startTime = values[6].equals("null") ? null : String.valueOf(values[6]);
+        final String endTime = values[7].equals("null") ? null : String.valueOf(values[7]);
 
         switch (taskType) {
             case TASK:

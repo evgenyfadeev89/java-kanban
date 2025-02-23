@@ -2,12 +2,12 @@ package ru.yandex.practicum.taskmanager;
 
 import ru.yandex.practicum.taskmanager.manager.*;
 import ru.yandex.practicum.taskmanager.files.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Duration;
-import java.time.LocalDateTime;
+
 
 public class Main {
 
@@ -19,10 +19,10 @@ public class Main {
         //создание
         Task task1 = new Task("Task_1", "Task_1 description");
         Task task2 = new Task("Task_2", "Task_2 description");
-        task1.setStartTime("2025-02-20 10:00");
-        task1.setDuration(15);
-        task2.setStartTime("2025-02-20 10:16");
-        task2.setDuration(4);
+        task1.setStartTime("2025-02-20 10:30");
+        task1.setDuration(10);
+        task2.setStartTime("2025-02-20 10:00");
+        task2.setDuration(6);
         final int taskId1 = manager.addNewTask(task1);
         final int taskId2 = manager.addNewTask(task2);
 
@@ -36,12 +36,10 @@ public class Main {
         Subtask subtask1 = new Subtask("Subtask_1-1", "Subtask_1 description", epicId1);
         Subtask subtask2 = new Subtask("Subtask_2-1", "Subtask_2 description", epicId1);
         Subtask subtask3 = new Subtask("Subtask_3-2", "Subtask_3 description", epicId2);
-        subtask1.setStartTime("2025-02-20 10:25");
+        subtask1.setStartTime("2025-02-20 10:40");
         subtask1.setDuration(15);
-        subtask2.setStartTime("2025-02-20 11:00");
+        subtask2.setStartTime("2025-02-20 11:10");
         subtask2.setDuration(5);
-//        subtask3.setStartTime(LocalDateTime.parse("2025-02-20 12:10", subtask3.formatter));
-//        subtask3.setDuration(25);
 
         final Integer subtaskId1 = manager.addNewSubtask(subtask1);
         final Integer subtaskId2 = manager.addNewSubtask(subtask2);
@@ -49,6 +47,9 @@ public class Main {
 
         System.out.println("Общий вывод всего");
         manager.printAllTasks(manager);
+
+        System.out.println("Вывод SortedTaskSet");
+        manager.printPrioritizedTasks();
 
         //обновление
         final Task task = manager.getTask(taskId2);

@@ -15,13 +15,23 @@ public class Task {
     protected int epicId;
     protected Duration duration = Duration.ZERO;
     protected LocalDateTime startTime;
-    public DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"); //поменять "yyyy-MM-dd HH:mm"
+    public DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
         this.status = TaskStatus.NEW;
         this.taskType = TaskType.TASK;
+    }
+
+    public Task(TaskType taskType,
+                String name,
+                TaskStatus status,
+                String description) {
+        this.taskType = taskType;
+        this.name = name;
+        this.status = status;
+        this.description = description;
     }
 
     public Task(int id,
@@ -36,19 +46,33 @@ public class Task {
         this.description = description;
     }
 
+    public Task(TaskType taskType,
+                String name,
+                TaskStatus status,
+                String description,
+                long duration,
+                String startTime) {
+        this.taskType = taskType;
+        this.name = name;
+        this.status = status;
+        this.description = description;
+        this.duration = Duration.ofMinutes(duration);
+        this.startTime = startTime != null ? LocalDateTime.parse(startTime, formatter) : null;
+    }
+
     public Task(int id,
                 TaskType taskType,
                 String name,
                 TaskStatus status,
                 String description,
-                Duration duration,
+                long duration,
                 String startTime) {
         this.id = id;
         this.taskType = taskType;
         this.name = name;
         this.status = status;
         this.description = description;
-        this.duration = duration;
+        this.duration = Duration.ofMinutes(duration);
         this.startTime = startTime != null ? LocalDateTime.parse(startTime, formatter) : null;
     }
 
@@ -100,8 +124,8 @@ public class Task {
         return startTime.plus(duration).format(formatter);
     }
 
-    public Duration getDuration() {
-        return duration;
+    public long getDuration() {
+        return duration.toMinutes();
     }
 
     public void setDuration(long duration) {
@@ -140,8 +164,7 @@ public class Task {
                 ", status='" + status + "'" +
                 ", type=" + taskType +
                 ", duration=" + duration.toSeconds() +
-                ", startTime=" + startTime + //(startTime != null ? startTime.format(formatter) : "null") +
-                //", endTime=" + endTime.format(formatter) +
+                ", startTime=" + startTime +
                 "}";
     }
 }

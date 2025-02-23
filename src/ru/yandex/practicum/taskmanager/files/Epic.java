@@ -1,7 +1,5 @@
 package ru.yandex.practicum.taskmanager.files;
 
-import ru.yandex.practicum.taskmanager.manager.InMemoryTaskManager;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,28 +13,51 @@ public class Epic extends Task {
         this.taskType = TaskType.EPIC;
     }
 
-public Epic(int id,
-            TaskType taskType,
-            String name,
-            TaskStatus status,
-            String description) {
-    super(id, taskType, name, status, description);
-    this.taskType = TaskType.EPIC;
-}
+    public Epic(TaskType taskType,
+                String name,
+                TaskStatus status,
+                String description) {
+        super(taskType, name, status, description);
+        this.taskType = TaskType.EPIC;
+    }
 
-public Epic(int id,
-            TaskType taskType,
-            String name,
-            TaskStatus status,
-            String description,
-            Duration duration,
-            String startTime,
-            String endTime) {
+    public Epic(int id,
+                TaskType taskType,
+                String name,
+                TaskStatus status,
+                String description) {
+        super(id, taskType, name, status, description);
+        this.taskType = TaskType.EPIC;
+    }
+
+    public Epic(TaskType taskType,
+                String name,
+                TaskStatus status,
+                String description,
+                long duration,
+                String startTime,
+                String endTime) {
+        super(taskType, name, status, description, duration, startTime);
+        this.taskType = TaskType.EPIC;
+        this.endTime = endTime != null ? LocalDateTime.parse(endTime, formatter) : null;
+    }
+
+    public Epic(int id,
+                TaskType taskType,
+                String name,
+                TaskStatus status,
+                String description,
+                long duration,
+                String startTime,
+                String endTime) {
         super(id, taskType, name, status, description, duration, startTime);
         this.taskType = TaskType.EPIC;
         this.endTime = endTime != null ? LocalDateTime.parse(endTime, formatter) : null;
     }
 
+    public void setNullSubtaskIds() {
+        subtaskIds = new ArrayList<>();
+    }
 
     public void addSubtaskId(int id) {
         subtaskIds.add(id);
@@ -59,7 +80,7 @@ public Epic(int id,
     }
 
     public String getEndTime() {
-        if (getStartTime() == null || getDuration() == null) {
+        if (getStartTime() == null || Duration.ofMinutes(getDuration()) == null) {
             return null;
         }
         return endTime != null ? endTime.format(formatter) : null;
@@ -77,8 +98,6 @@ public Epic(int id,
                 ", duration=" + duration.toSeconds() +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
-//                ", startTime=" + (startTime != null ? startTime.format(formatter) : "null") +
-//                ", endTime=" + (endTime != null ? endTime.format(formatter) : "null") +
                 "}";
     }
 }

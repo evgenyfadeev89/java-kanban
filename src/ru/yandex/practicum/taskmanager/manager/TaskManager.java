@@ -20,11 +20,11 @@ public interface TaskManager {
 
     Epic getEpic(int id);
 
-    int addNewTask(Task task);
+    int addNewTask(Task task) throws TimeCheckException;
 
     int addNewEpic(Epic epic);
 
-    int addNewSubtask(Subtask subtask);
+    int addNewSubtask(Subtask subtask) throws TimeCheckException;
 
     void updateEpicStatus(Subtask subtask);
 
@@ -52,7 +52,9 @@ public interface TaskManager {
 
     Set<Task> getPrioritizedTasks();
 
-    boolean findCrossTask (Task task);
+    boolean findCrossTask(Task task);
 
     void printAllTasks(TaskManager manager);
+
+    void printPrioritizedTasks();
 }

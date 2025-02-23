@@ -28,7 +28,6 @@ public class InMemoryHistoryManager implements HistoryManager {
     private Node last;
     private ArrayList<Task> viewTasks = new ArrayList<>();
 
-
     private void linkLast(Task task) {
         final Node newNode = new Node(task, last, null);
         final Node oldLast = nodeMap.remove(last.task.getId());
@@ -45,7 +44,6 @@ public class InMemoryHistoryManager implements HistoryManager {
         last = node;
         return node;
     }
-
 
     @Override
     public void add(Task task) {
@@ -78,7 +76,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
 
         viewTasks.remove(node.task);
-        if (node.prev == null && node.next != null) {               //проверяем, что в списке не один элемент
+        if (node.prev == null && node.next != null) {
             // 1. Удаление первого элемента
             first = node.next;
             first.prev = null;
@@ -92,5 +90,4 @@ public class InMemoryHistoryManager implements HistoryManager {
             node.prev.next = null;
         }
     }
-
 }
