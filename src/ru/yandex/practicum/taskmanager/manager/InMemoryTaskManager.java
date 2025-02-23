@@ -47,8 +47,8 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public ArrayList<Subtask> getEpicSubtasks(int epicId) {
         ArrayList<Integer> subtaskIds = epics.get(epicId).getSubtaskIds();
-        return subtaskIds.stream().
-                map(id -> getSubtask(id))
+        return subtaskIds.stream()
+                .map(id -> getSubtask(id))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -298,16 +298,16 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     public boolean findCrossTask(Task task) {
-        if (task.getStartTime() == null) {// || task.getEndTime() == null) {
-            return false; // Если время не задано, пересечения нет
+        if (task.getStartTime() == null) {
+            return false;
         }
 
         return getPrioritizedTasks().stream().
-                filter(task1 -> !task1.equals(task)).
-                anyMatch(task1 -> LocalDateTime.parse(task1.getEndTime(), formatter).
-                        isAfter(LocalDateTime.parse(task.getStartTime(), formatter)) &
-                        LocalDateTime.parse(task.getEndTime(), formatter).
-                                isAfter(LocalDateTime.parse(task1.getStartTime(), formatter)));
+                filter(task1 -> !task1.equals(task))
+                .anyMatch(task1 -> LocalDateTime.parse(task1.getEndTime(), formatter)
+                        .isAfter(LocalDateTime.parse(task.getStartTime(), formatter)) &
+                        LocalDateTime.parse(task.getEndTime(), formatter)
+                        .isAfter(LocalDateTime.parse(task1.getStartTime(), formatter)));
     }
 
     @Override
