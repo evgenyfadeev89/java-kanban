@@ -64,7 +64,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         } catch (IOException e) {
             System.out.println("Ошибка считывания из файла" + e.getMessage());
         }
-//        taskManager.save();
         return taskManager;
     }
 
@@ -139,12 +138,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     @Override
     public void updateEpicStatus(Subtask subtask) {
         super.updateEpicStatus(subtask);
-        save();
-    }
-
-    @Override
-    public void updateEpicTimeFields(int epicId) {
-        super.updateEpicTimeFields(epicId);
         save();
     }
 

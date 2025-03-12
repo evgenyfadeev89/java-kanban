@@ -19,12 +19,20 @@ public class Main {
         //создание
         Task task1 = new Task("Task_1", "Task_1 description");
         Task task2 = new Task("Task_2", "Task_2 description");
+        Task task3 = new Task(5,
+                TaskType.TASK,
+                "Task_3",
+                TaskStatus.NEW,
+                "Task_2 description",
+                20,
+                "2025-02-20 13:50");
         task1.setStartTime("2025-02-20 10:30");
         task1.setDuration(10);
         task2.setStartTime("2025-02-20 10:00");
         task2.setDuration(6);
         final int taskId1 = manager.addNewTask(task1);
         final int taskId2 = manager.addNewTask(task2);
+        final int taskId3 = manager.addNewTask(task3);
 
         Epic epic1 = new Epic("Epic_1", "Epic_1 description");
         Epic epic2 = new Epic("Epic_2", "Epic_2 description");
@@ -61,6 +69,14 @@ public class Main {
             System.out.println(t);
         }
 
+        final Task taskUpd = manager.getTask(taskId3);
+        taskUpd.setStartTime("2025-02-20 15:40");
+        manager.updateTask(taskUpd);
+        System.out.println("Задачи:");
+        for (Task t : manager.getTasks()) {
+            System.out.println(t);
+        }
+
         Subtask subtask = manager.getSubtask(subtaskId2);
         subtask.setStatus(TaskStatus.DONE);
         manager.updateSubtask(subtask);
@@ -70,6 +86,11 @@ public class Main {
         subtask.setStatus(TaskStatus.NEW);
         manager.updateSubtask(subtask);
         System.out.println("Change status: Subtask7 DONE -> NEW");
+
+        subtask = manager.getSubtask(subtaskId1);
+        subtask.setStartTime("2025-02-20 10:40");
+        manager.updateSubtask(subtask);
+        System.out.println("Поменяли время начала подзадачи на 2025-02-20 10:40");
 
         System.out.println("*".repeat(20) + "Выводим историю" + "*".repeat(20));
         System.out.println(manager.getHistory());

@@ -37,6 +37,51 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
+    void findCrossAddTaskTest() {
+        Task task1 = new Task(TaskType.TASK,
+                "Test addNewTask1",
+                TaskStatus.NEW,
+                "Test addNewTaskTest description",
+                10,
+                "2025-02-22 10:00");
+        taskManager.addNewTask(task1);
+        Task task2 = new Task(TaskType.TASK,
+                "Test addNewTask2",
+                TaskStatus.NEW,
+                "Test addNewTaskTest description",
+                10,
+                "2025-02-22 10:05");
+
+        assertThrows(TimeCheckException.class, () -> {
+            taskManager.addNewTask(task2);
+        }, "Добавление задачи, пересекающейся по времени не вызвало исключение TimeCheckException");
+    }
+
+    @Test
+    void findCrossUpdTaskTest() {
+        Task task1 = new Task(TaskType.TASK,
+                "Test addNewTask1",
+                TaskStatus.NEW,
+                "Test addNewTaskTest description",
+                10,
+                "2025-02-22 10:00");
+        taskManager.addNewTask(task1);
+        Task task2 = new Task(TaskType.TASK,
+                "Test addNewTask2",
+                TaskStatus.NEW,
+                "Test addNewTaskTest description",
+                10,
+                "2025-02-22 10:30");
+        taskManager.addNewTask(task2);
+
+        task1.setStartTime("2025-02-22 10:35");
+
+        assertThrows(TimeCheckException.class, () -> {
+            taskManager.updateTask(task1);
+        }, "Добавление задачи, пересекающейся по времени не вызвало исключение TimeCheckException");
+    }
+
+    @Test
     void addNewEpicTest() {
         Epic epic = new Epic("Test addNewEpic", "Test addNewEpicTest description");
         final int epicId = taskManager.addNewEpic(epic);
@@ -64,6 +109,61 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         assertNotNull(savedSubtask, "Задача не найдена.");
         assertEquals(subtask1, savedSubtask, "Задачи не совпадают.");
+    }
+
+    @Test
+    void findCrossAddSubTaskTest() {
+        Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description");
+        final int epicId = taskManager.addNewEpic(epic);
+
+        Subtask subtask1 = new Subtask(TaskType.SUBTASK,
+                "Test subtask1",
+                TaskStatus.NEW,
+                "Test addNewSubTaskTest description1",
+                10,
+                "2025-02-22 10:00",
+                epicId);
+        taskManager.addNewSubtask(subtask1);
+        Subtask subtask2 = new Subtask(TaskType.SUBTASK,
+                "Test subtask2",
+                TaskStatus.NEW,
+                "Test addNewSubTaskTest description1",
+                10,
+                "2025-02-22 10:05",
+                epicId);
+
+        assertThrows(TimeCheckException.class, () -> {
+            taskManager.addNewSubtask(subtask2);
+        }, "Добавление задачи, пересекающейся по времени не вызвало исключение TimeCheckException");
+    }
+
+    @Test
+    void findCrossUpdSubTaskTest() {
+        Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description");
+        final int epicId = taskManager.addNewEpic(epic);
+
+        Subtask subtask1 = new Subtask(TaskType.SUBTASK,
+                "Test subtask1",
+                TaskStatus.NEW,
+                "Test addNewSubTaskTest description1",
+                10,
+                "2025-02-22 10:00",
+                epicId);
+        taskManager.addNewSubtask(subtask1);
+        Subtask subtask2 = new Subtask(TaskType.SUBTASK,
+                "Test subtask2",
+                TaskStatus.NEW,
+                "Test addNewSubTaskTest description1",
+                10,
+                "2025-02-22 10:20",
+                epicId);
+        taskManager.addNewSubtask(subtask2);
+
+        subtask1.setStartTime("2025-02-22 10:25");
+
+        assertThrows(TimeCheckException.class, () -> {
+            taskManager.updateSubtask(subtask1);
+        }, "Добавление задачи, пересекающейся по времени не вызвало исключение TimeCheckException");
     }
 
     @Test

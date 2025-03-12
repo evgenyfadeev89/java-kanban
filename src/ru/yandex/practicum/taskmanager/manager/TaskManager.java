@@ -28,8 +28,6 @@ public interface TaskManager {
 
     void updateEpicStatus(Subtask subtask);
 
-    void updateEpicTimeFields(int epicId);
-
     void updateTask(Task task); //next
 
     void updateEpic(Epic epic);
@@ -51,8 +49,6 @@ public interface TaskManager {
     List<Task> getHistory();
 
     Set<Task> getPrioritizedTasks();
-
-    boolean findCrossTask(Task task);
 
     void printAllTasks(TaskManager manager);
 

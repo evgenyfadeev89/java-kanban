@@ -15,7 +15,7 @@ public class InMemoryTaskManager implements TaskManager {
     protected final Map<Integer, Subtask> subtasks = new HashMap<>();
     protected final Map<Integer, Epic> epics = new HashMap<>();
 
-    Comparator<Task> comparator = Comparator.comparing(task -> LocalDateTime.parse(task.getStartTime(), formatter));
+    private Comparator<Task> comparator = Comparator.comparing(task -> LocalDateTime.parse(task.getStartTime(), formatter));
     protected final Set<Task> sortedTaskSet = new TreeSet(comparator);
 
     private final HistoryManager historyManager = Managers.getDefaultHistory();
@@ -31,7 +31,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public ArrayList<Task> getTasks() {
-        return !tasks.values().isEmpty() ? new ArrayList<>(tasks.values()) : new ArrayList<>();
+        return new ArrayList<>(tasks.values());
     }
 
     @Override
@@ -97,7 +97,10 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public int addNewEpic(Epic epic) {
+    public int addNewEpic(Epic epic) throws TimeCheckException {
+        if (findCrossTask(epic)) {
+            throw new TimeCheckException("Добавляемая задача пересекается по времени с другой");
+        }
         epic.setId(id);
         epics.put(epic.getId(), epic);
         generateId();
@@ -179,7 +182,7 @@ public class InMemoryTaskManager implements TaskManager {
         epic.setStatus(TaskStatus.IN_PROGRESS);
     }
 
-    public void updateEpicTimeFields(int epicId) {
+    private void updateEpicTimeFields(int epicId) {
         if (getEpicSubtasks(epicId).isEmpty()) {
             getEpic(epicId).setDuration(0);
             getEpic(epicId).setStartTime(null);
@@ -214,8 +217,12 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateTask(Task task) {
+    public void updateTask(Task task) throws TimeCheckException {
         if (getTask(task.getId()).equals(task) && getTask(task.getId()).hashCode() == task.hashCode()) { //проверяем, что задачи идентичны
+            tasks.remove(task.getId());
+            if (findCrossTask(task)) {
+                throw new TimeCheckException("Добавляемая задача пересекается по времени с другой");
+            }
             tasks.put(task.getId(), task);
         }
     }
@@ -232,6 +239,10 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateSubtask(Subtask subtask) {
         if (getSubtask(subtask.getId()).equals(subtask) && getSubtask(subtask.getId()).hashCode() == subtask.hashCode()) { //проверяем, что задачи идентичны
+            subtasks.remove(subtask.getId());
+            if (findCrossTask(subtask)) {
+                throw new TimeCheckException("Добавляемая задача пересекается по времени с другой");
+            }
             subtasks.put(subtask.getId(), subtask);
             updateEpic(getEpic(subtask.getEpicId()));
         }
@@ -297,7 +308,7 @@ public class InMemoryTaskManager implements TaskManager {
         return sortedTaskSet;
     }
 
-    public boolean findCrossTask(Task task) {
+    private boolean findCrossTask(Task task) {
         if (task.getStartTime() == null) {
             return false;
         }
