@@ -1,7 +1,9 @@
 package ru.yandex.practicum.taskmanager.files;
 
+import com.google.gson.annotations.SerializedName;
 
 public class Subtask extends Task {
+    @SerializedName("subtaskType")
     protected TaskType taskType;
 
     public Subtask(String name, String description, int epicId) {
@@ -55,7 +57,7 @@ public class Subtask extends Task {
                 ", epicId=" + epicId +
                 ", type=" + taskType +
                 ", duration=" + duration.toMinutes() +
-                ", startTime=" + startTime +
+                ", startTime=\"" + startTime + "\"" +
                 "}";
     }
 }

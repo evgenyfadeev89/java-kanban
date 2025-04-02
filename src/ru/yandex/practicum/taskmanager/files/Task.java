@@ -14,7 +14,7 @@ public class Task {
     protected int epicId;
     protected Duration duration = Duration.ZERO;
     protected LocalDateTime startTime;
-    public DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+//    public DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public Task(String name, String description) {
         this.name = name;
@@ -56,7 +56,7 @@ public class Task {
         this.status = status;
         this.description = description;
         this.duration = Duration.ofMinutes(duration);
-        this.startTime = startTime != null ? LocalDateTime.parse(startTime, formatter) : null;
+        this.startTime = startTime != null ? LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : null;
     }
 
     public Task(int id,
@@ -72,7 +72,7 @@ public class Task {
         this.status = status;
         this.description = description;
         this.duration = Duration.ofMinutes(duration);
-        this.startTime = startTime != null ? LocalDateTime.parse(startTime, formatter) : null;
+        this.startTime = startTime != null ? LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : null;
     }
 
 
@@ -120,7 +120,7 @@ public class Task {
         if (startTime == null || (duration == null || duration.isZero())) {
             return null;
         }
-        return startTime.plus(duration).format(formatter);
+        return startTime.plus(duration).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
     public long getDuration() {
@@ -132,11 +132,11 @@ public class Task {
     }
 
     public String getStartTime() {
-        return startTime != null ? startTime.format(formatter) : null;
+        return startTime != null ? startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : null;
     }
 
     public void setStartTime(String startTime) {
-        this.startTime = startTime != null ? LocalDateTime.parse(startTime, formatter) : null;
+        this.startTime = startTime != null ? LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : null;
     }
 
     @Override
@@ -163,7 +163,7 @@ public class Task {
                 ", status='" + status + "'" +
                 ", type=" + taskType +
                 ", duration=" + duration.toSeconds() +
-                ", startTime=" + startTime +
-                "}";
+                ", startTime=\"" + startTime +
+                "\"}";
     }
 }

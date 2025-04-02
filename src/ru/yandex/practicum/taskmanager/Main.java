@@ -1,152 +1,152 @@
-package ru.yandex.practicum.taskmanager;
-
-import ru.yandex.practicum.taskmanager.manager.*;
-import ru.yandex.practicum.taskmanager.files.*;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-
-public class Main {
-
-    public static void main(String[] args) throws IOException {
-        System.out.println("Тест!");
-
-        TaskManager manager = Managers.getDefaultFileBacked();
-
-        //создание
-        Task task1 = new Task("Task_1", "Task_1 description");
-        Task task2 = new Task("Task_2", "Task_2 description");
-        Task task3 = new Task(5,
-                TaskType.TASK,
-                "Task_3",
-                TaskStatus.NEW,
-                "Task_2 description",
-                20,
-                "2025-02-20 13:50");
-        task1.setStartTime("2025-02-20 10:30");
-        task1.setDuration(10);
-        task2.setStartTime("2025-02-20 10:00");
-        task2.setDuration(6);
-        final int taskId1 = manager.addNewTask(task1);
-        final int taskId2 = manager.addNewTask(task2);
-        final int taskId3 = manager.addNewTask(task3);
-
-        Epic epic1 = new Epic("Epic_1", "Epic_1 description");
-        Epic epic2 = new Epic("Epic_2", "Epic_2 description");
-        Epic epic8 = new Epic("Epic_3", "Epic_3 description");
-        final int epicId1 = manager.addNewEpic(epic1);
-        final int epicId2 = manager.addNewEpic(epic2);
-        final int epicId8 = manager.addNewEpic(epic8);
-
-        Subtask subtask1 = new Subtask("Subtask_1-1", "Subtask_1 description", epicId1);
-        Subtask subtask2 = new Subtask("Subtask_2-1", "Subtask_2 description", epicId1);
-        Subtask subtask3 = new Subtask("Subtask_3-2", "Subtask_3 description", epicId2);
-        subtask1.setStartTime("2025-02-20 10:40");
-        subtask1.setDuration(15);
-        subtask2.setStartTime("2025-02-20 11:10");
-        subtask2.setDuration(5);
-
-        final Integer subtaskId1 = manager.addNewSubtask(subtask1);
-        final Integer subtaskId2 = manager.addNewSubtask(subtask2);
-        final Integer subtaskId3 = manager.addNewSubtask(subtask3);
-
-        System.out.println("Общий вывод всего");
-        manager.printAllTasks(manager);
-
-        System.out.println("Вывод SortedTaskSet");
-        manager.printPrioritizedTasks();
-
-        //обновление
-        final Task task = manager.getTask(taskId2);
-        task.setStatus(TaskStatus.DONE);
-        manager.updateTask(task);
-        System.out.println("Change status: Task2 NEW -> DONE");
-        System.out.println("Задачи:");
-        for (Task t : manager.getTasks()) {
-            System.out.println(t);
-        }
-
-        final Task taskUpd = manager.getTask(taskId3);
-        taskUpd.setStartTime("2025-02-20 15:40");
-        manager.updateTask(taskUpd);
-        System.out.println("Задачи:");
-        for (Task t : manager.getTasks()) {
-            System.out.println(t);
-        }
-
-        Subtask subtask = manager.getSubtask(subtaskId2);
-        subtask.setStatus(TaskStatus.DONE);
-        manager.updateSubtask(subtask);
-        System.out.println("Change status: Subtask6 NEW -> DONE");
-
-        subtask = manager.getSubtask(subtaskId3);
-        subtask.setStatus(TaskStatus.NEW);
-        manager.updateSubtask(subtask);
-        System.out.println("Change status: Subtask7 DONE -> NEW");
-
-        subtask = manager.getSubtask(subtaskId1);
-        subtask.setStartTime("2025-02-20 10:40");
-        manager.updateSubtask(subtask);
-        System.out.println("Поменяли время начала подзадачи на 2025-02-20 10:40");
-
-        System.out.println("*".repeat(20) + "Выводим историю" + "*".repeat(20));
-        System.out.println(manager.getHistory());
-        System.out.println("*".repeat(55));
-
-        //Удаление
-        System.out.println("Удаляем элементы");
-        manager.deleteTask(2);
-        for (Task t : manager.getTasks()) {
-            System.out.println(t);
-        }
-
-        manager.deleteSubtask(subtaskId2);
-        System.out.println(manager.getSubtasks());
-        for (Epic e : manager.getEpics()) {
-            System.out.println(e);
-        }
-
-        manager.deleteEpic(epicId1);
-        System.out.println(manager.getSubtasks());
-        for (Epic e : manager.getEpics()) {
-            System.out.println(e);
-        }
-
-
-        manager.getSubtask(subtaskId2);
-        manager.getSubtask(subtaskId1);
-        manager.getSubtask(subtaskId3);
-
-        System.out.println("Общий вывод всего");
-        manager.printAllTasks(manager);
-
-
-        //для тестов FileBackedTaskManager
-        System.out.println("*".repeat(60));
-        File file = new File("resources/task.csv");
-        TaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
-        System.out.println("Проверка наполнения fileBackedTaskManager");
-        fileBackedTaskManager.printAllTasks(fileBackedTaskManager);
-
-        TaskManager fileBackedTaskManagerAfterLoad = FileBackedTaskManager.loadFromFile(file);
-        System.out.println("*".repeat(60));
-        System.out.println("Проверка наполнения fileBackedTaskManagerAfterLoad");
-        fileBackedTaskManagerAfterLoad.printAllTasks(fileBackedTaskManagerAfterLoad);
-
-        Path testEmptyManager = Files.createTempFile("testEmptyManager", ".csv");
-        File testFile = new File(testEmptyManager.toUri());
-        TaskManager fileBackedTaskManagerTest = new FileBackedTaskManager(testFile);
-        System.out.println("*".repeat(60));
-        System.out.println("Проверка наполнения fileBackedTaskManagerTest");
-        fileBackedTaskManagerTest.printAllTasks(fileBackedTaskManagerTest);
-
-        TaskManager fileBackedTaskManagerTestAfterLoad = FileBackedTaskManager.loadFromFile(testFile);
-        System.out.println("*".repeat(60));
-        System.out.println("Проверка наполнения fileBackedTaskManagerTestAfterLoad");
-        fileBackedTaskManagerTestAfterLoad.printAllTasks(fileBackedTaskManagerTestAfterLoad);
-
-    }
-}
+//package ru.yandex.practicum.taskmanager;
+//
+//import ru.yandex.practicum.taskmanager.manager.*;
+//import ru.yandex.practicum.taskmanager.files.*;
+//
+//import java.io.File;
+//import java.io.IOException;
+//import java.nio.file.Files;
+//import java.nio.file.Path;
+//
+//
+//public class Main {
+//
+//    public static void main(String[] args) throws IOException {
+//        System.out.println("Тест!");
+//
+//        TaskManager manager = Managers.getDefaultFileBacked();
+//
+//        //создание
+//        Task task1 = new Task("Task_1", "Task_1 description");
+//        Task task2 = new Task("Task_2", "Task_2 description");
+//        Task task3 = new Task(5,
+//                TaskType.TASK,
+//                "Task_3",
+//                TaskStatus.NEW,
+//                "Task_2 description",
+//                20,
+//                "2025-02-20 13:50");
+//        task1.setStartTime("2025-02-20 10:30");
+//        task1.setDuration(10);
+//        task2.setStartTime("2025-02-20 10:00");
+//        task2.setDuration(6);
+//        final int taskId1 = manager.addNewTask(task1);
+//        final int taskId2 = manager.addNewTask(task2);
+//        final int taskId3 = manager.addNewTask(task3);
+//
+//        Epic epic1 = new Epic("Epic_1", "Epic_1 description");
+//        Epic epic2 = new Epic("Epic_2", "Epic_2 description");
+//        Epic epic8 = new Epic("Epic_3", "Epic_3 description");
+//        final int epicId1 = manager.addNewEpic(epic1);
+//        final int epicId2 = manager.addNewEpic(epic2);
+//        final int epicId8 = manager.addNewEpic(epic8);
+//
+//        Subtask subtask1 = new Subtask("Subtask_1-1", "Subtask_1 description", epicId1);
+//        Subtask subtask2 = new Subtask("Subtask_2-1", "Subtask_2 description", epicId1);
+//        Subtask subtask3 = new Subtask("Subtask_3-2", "Subtask_3 description", epicId2);
+//        subtask1.setStartTime("2025-02-20 10:40");
+//        subtask1.setDuration(15);
+//        subtask2.setStartTime("2025-02-20 11:10");
+//        subtask2.setDuration(5);
+//
+//        final Integer subtaskId1 = manager.addNewSubtask(subtask1);
+//        final Integer subtaskId2 = manager.addNewSubtask(subtask2);
+//        final Integer subtaskId3 = manager.addNewSubtask(subtask3);
+//
+//        System.out.println("Общий вывод всего");
+//        manager.printAllTasks(manager);
+//
+//        System.out.println("Вывод SortedTaskSet");
+//        manager.printPrioritizedTasks();
+//
+//        //обновление
+//        final Task task = manager.getTask(taskId2);
+//        task.setStatus(TaskStatus.DONE);
+//        manager.updateTask(task);
+//        System.out.println("Change status: Task2 NEW -> DONE");
+//        System.out.println("Задачи:");
+//        for (Task t : manager.getTasks()) {
+//            System.out.println(t);
+//        }
+//
+//        final Task taskUpd = manager.getTask(taskId3);
+//        taskUpd.setStartTime("2025-02-20 15:40");
+//        manager.updateTask(taskUpd);
+//        System.out.println("Задачи:");
+//        for (Task t : manager.getTasks()) {
+//            System.out.println(t);
+//        }
+//
+//        Subtask subtask = manager.getSubtask(subtaskId2);
+//        subtask.setStatus(TaskStatus.DONE);
+//        manager.updateSubtask(subtask);
+//        System.out.println("Change status: Subtask6 NEW -> DONE");
+//
+//        subtask = manager.getSubtask(subtaskId3);
+//        subtask.setStatus(TaskStatus.NEW);
+//        manager.updateSubtask(subtask);
+//        System.out.println("Change status: Subtask7 DONE -> NEW");
+//
+//        subtask = manager.getSubtask(subtaskId1);
+//        subtask.setStartTime("2025-02-20 10:40");
+//        manager.updateSubtask(subtask);
+//        System.out.println("Поменяли время начала подзадачи на 2025-02-20 10:40");
+//
+//        System.out.println("*".repeat(20) + "Выводим историю" + "*".repeat(20));
+//        System.out.println(manager.getHistory());
+//        System.out.println("*".repeat(55));
+//
+//        //Удаление
+//        System.out.println("Удаляем элементы");
+//        manager.deleteTask(2);
+//        for (Task t : manager.getTasks()) {
+//            System.out.println(t);
+//        }
+//
+//        manager.deleteSubtask(subtaskId2);
+//        System.out.println(manager.getSubtasks());
+//        for (Epic e : manager.getEpics()) {
+//            System.out.println(e);
+//        }
+//
+//        manager.deleteEpic(epicId1);
+//        System.out.println(manager.getSubtasks());
+//        for (Epic e : manager.getEpics()) {
+//            System.out.println(e);
+//        }
+//
+//
+//        manager.getSubtask(subtaskId2);
+//        manager.getSubtask(subtaskId1);
+//        manager.getSubtask(subtaskId3);
+//
+//        System.out.println("Общий вывод всего");
+//        manager.printAllTasks(manager);
+//
+//
+//        //для тестов FileBackedTaskManager
+//        System.out.println("*".repeat(60));
+//        File file = new File("resources/task.csv");
+//        TaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
+//        System.out.println("Проверка наполнения fileBackedTaskManager");
+//        fileBackedTaskManager.printAllTasks(fileBackedTaskManager);
+//
+//        TaskManager fileBackedTaskManagerAfterLoad = FileBackedTaskManager.loadFromFile(file);
+//        System.out.println("*".repeat(60));
+//        System.out.println("Проверка наполнения fileBackedTaskManagerAfterLoad");
+//        fileBackedTaskManagerAfterLoad.printAllTasks(fileBackedTaskManagerAfterLoad);
+//
+//        Path testEmptyManager = Files.createTempFile("testEmptyManager", ".csv");
+//        File testFile = new File(testEmptyManager.toUri());
+//        TaskManager fileBackedTaskManagerTest = new FileBackedTaskManager(testFile);
+//        System.out.println("*".repeat(60));
+//        System.out.println("Проверка наполнения fileBackedTaskManagerTest");
+//        fileBackedTaskManagerTest.printAllTasks(fileBackedTaskManagerTest);
+//
+//        TaskManager fileBackedTaskManagerTestAfterLoad = FileBackedTaskManager.loadFromFile(testFile);
+//        System.out.println("*".repeat(60));
+//        System.out.println("Проверка наполнения fileBackedTaskManagerTestAfterLoad");
+//        fileBackedTaskManagerTestAfterLoad.printAllTasks(fileBackedTaskManagerTestAfterLoad);
+//
+//    }
+//}
