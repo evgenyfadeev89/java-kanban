@@ -47,7 +47,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add(Task task) {
-        if(Objects.nonNull(task)) {
+        if (Objects.nonNull(task)) {
             remove(task.getId());
             viewTasks.remove(task);
 
