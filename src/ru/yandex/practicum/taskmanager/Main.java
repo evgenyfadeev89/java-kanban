@@ -2,10 +2,12 @@ package ru.yandex.practicum.taskmanager;
 
 import ru.yandex.practicum.taskmanager.manager.*;
 import ru.yandex.practicum.taskmanager.files.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
 
 public class Main {
 
@@ -17,8 +19,20 @@ public class Main {
         //создание
         Task task1 = new Task("Task_1", "Task_1 description");
         Task task2 = new Task("Task_2", "Task_2 description");
+        Task task3 = new Task(5,
+                TaskType.TASK,
+                "Task_3",
+                TaskStatus.NEW,
+                "Task_2 description",
+                20,
+                "2025-02-20 13:50");
+        task1.setStartTime("2025-02-20 10:30");
+        task1.setDuration(10);
+        task2.setStartTime("2025-02-20 10:00");
+        task2.setDuration(6);
         final int taskId1 = manager.addNewTask(task1);
         final int taskId2 = manager.addNewTask(task2);
+        final int taskId3 = manager.addNewTask(task3);
 
         Epic epic1 = new Epic("Epic_1", "Epic_1 description");
         Epic epic2 = new Epic("Epic_2", "Epic_2 description");
@@ -30,7 +44,10 @@ public class Main {
         Subtask subtask1 = new Subtask("Subtask_1-1", "Subtask_1 description", epicId1);
         Subtask subtask2 = new Subtask("Subtask_2-1", "Subtask_2 description", epicId1);
         Subtask subtask3 = new Subtask("Subtask_3-2", "Subtask_3 description", epicId2);
-
+        subtask1.setStartTime("2025-02-20 10:40");
+        subtask1.setDuration(15);
+        subtask2.setStartTime("2025-02-20 11:10");
+        subtask2.setDuration(5);
 
         final Integer subtaskId1 = manager.addNewSubtask(subtask1);
         final Integer subtaskId2 = manager.addNewSubtask(subtask2);
@@ -39,11 +56,22 @@ public class Main {
         System.out.println("Общий вывод всего");
         manager.printAllTasks(manager);
 
+        System.out.println("Вывод SortedTaskSet");
+        manager.printPrioritizedTasks();
+
         //обновление
         final Task task = manager.getTask(taskId2);
         task.setStatus(TaskStatus.DONE);
         manager.updateTask(task);
         System.out.println("Change status: Task2 NEW -> DONE");
+        System.out.println("Задачи:");
+        for (Task t : manager.getTasks()) {
+            System.out.println(t);
+        }
+
+        final Task taskUpd = manager.getTask(taskId3);
+        taskUpd.setStartTime("2025-02-20 15:40");
+        manager.updateTask(taskUpd);
         System.out.println("Задачи:");
         for (Task t : manager.getTasks()) {
             System.out.println(t);
@@ -58,6 +86,11 @@ public class Main {
         subtask.setStatus(TaskStatus.NEW);
         manager.updateSubtask(subtask);
         System.out.println("Change status: Subtask7 DONE -> NEW");
+
+        subtask = manager.getSubtask(subtaskId1);
+        subtask.setStartTime("2025-02-20 10:40");
+        manager.updateSubtask(subtask);
+        System.out.println("Поменяли время начала подзадачи на 2025-02-20 10:40");
 
         System.out.println("*".repeat(20) + "Выводим историю" + "*".repeat(20));
         System.out.println(manager.getHistory());

@@ -1,6 +1,7 @@
 package ru.yandex.practicum.taskmanager.manager;
 
 import java.util.List;
+import java.util.Set;
 
 import ru.yandex.practicum.taskmanager.files.*;
 
@@ -19,11 +20,11 @@ public interface TaskManager {
 
     Epic getEpic(int id);
 
-    int addNewTask(Task task);
+    int addNewTask(Task task) throws TimeCheckException;
 
     int addNewEpic(Epic epic);
 
-    int addNewSubtask(Subtask subtask);
+    int addNewSubtask(Subtask subtask) throws TimeCheckException;
 
     void updateEpicStatus(Subtask subtask);
 
@@ -47,5 +48,9 @@ public interface TaskManager {
 
     List<Task> getHistory();
 
+    Set<Task> getPrioritizedTasks();
+
     void printAllTasks(TaskManager manager);
+
+    void printPrioritizedTasks();
 }

@@ -10,8 +10,29 @@ public class Subtask extends Task {
         this.taskType = TaskType.SUBTASK;
     }
 
-    public Subtask(int id, TaskType taskType, String name, TaskStatus status, String description, int epicId) {
-        super(id, taskType, name, status, description);
+    public Subtask(TaskType taskType,
+                   String name,
+                   TaskStatus status,
+                   String description,
+                   long duration,
+                   String startTime,
+                   int epicId
+    ) {
+        super(taskType, name, status, description, duration, startTime);
+        this.epicId = epicId;
+        this.taskType = TaskType.SUBTASK;
+    }
+
+    public Subtask(int id,
+                   TaskType taskType,
+                   String name,
+                   TaskStatus status,
+                   String description,
+                   long duration,
+                   String startTime,
+                   int epicId
+    ) {
+        super(id, taskType, name, status, description, duration, startTime);
         this.epicId = epicId;
         this.taskType = TaskType.SUBTASK;
     }
@@ -33,6 +54,8 @@ public class Subtask extends Task {
                 ", status='" + status + "'" +
                 ", epicId=" + epicId +
                 ", type=" + taskType +
+                ", duration=" + duration.toMinutes() +
+                ", startTime=" + startTime +
                 "}";
     }
 }
