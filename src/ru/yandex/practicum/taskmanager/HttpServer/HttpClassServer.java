@@ -1,10 +1,8 @@
 package ru.yandex.practicum.taskmanager.HttpServer;
 
-import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpServer;
 import ru.yandex.practicum.taskmanager.manager.*;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
 
 public class HttpClassServer {
