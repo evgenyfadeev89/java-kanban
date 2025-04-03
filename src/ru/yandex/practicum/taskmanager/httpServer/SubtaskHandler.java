@@ -1,4 +1,4 @@
-package ru.yandex.practicum.taskmanager.HttpServer;
+package ru.yandex.practicum.taskmanager.httpServer;
 
 import com.sun.net.httpserver.HttpExchange;
 import ru.yandex.practicum.taskmanager.files.*;

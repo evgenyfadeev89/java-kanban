@@ -96,7 +96,7 @@ public class Epic extends Task {
                 ", status='" + status + "'" +
                 ", subtaskIds=" + subtaskIds +
                 ", type=" + taskType +
-                ", duration=" + duration.toSeconds() +
+                ", duration=" + duration.toMinutes() +
                 ", startTime=\"" + startTime + "\"" +
                 ", endTime=\"" + endTime + "\"" +
                 "}";

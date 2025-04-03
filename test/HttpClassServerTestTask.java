@@ -1,3 +1,4 @@
+import com.google.gson.internal.bind.util.ISO8601Utils;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.taskmanager.files.Task;
 import ru.yandex.practicum.taskmanager.files.TaskStatus;
@@ -188,7 +189,8 @@ public class HttpClassServerTestTask extends HttpClassServerTest {
                     .header("Content-type", "application/json")
                     .build();
 
-            HttpResponse<String> response = httpClient.send(requestGET, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+            HttpResponse<String> response = httpClient.send(requestGET, HttpResponse.BodyHandlers.ofString());
+            System.out.println("response.code: " + response.statusCode());
             String respBody = response.body()
                     .replaceFirst("\"", "")
                     .replace("\\u003d", "=")

@@ -14,7 +14,6 @@ public class Task {
     protected int epicId;
     protected Duration duration = Duration.ZERO;
     protected LocalDateTime startTime;
-//    public DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public Task(String name, String description) {
         this.name = name;
@@ -44,6 +43,7 @@ public class Task {
         this.status = status;
         this.description = description;
     }
+
 
     public Task(TaskType taskType,
                 String name,
@@ -162,7 +162,7 @@ public class Task {
                 ", id=" + id +
                 ", status='" + status + "'" +
                 ", type=" + taskType +
-                ", duration=" + duration.toSeconds() +
+                ", duration=" + duration.toMinutes() +
                 ", startTime=\"" + startTime +
                 "\"}";
     }

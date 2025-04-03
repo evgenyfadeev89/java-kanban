@@ -1,4 +1,4 @@
-package ru.yandex.practicum.taskmanager.HttpServer;
+package ru.yandex.practicum.taskmanager.httpServer;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

@@ -1,4 +1,4 @@
-package ru.yandex.practicum.taskmanager.HttpServer;
+package ru.yandex.practicum.taskmanager.httpServer;
 
 import com.sun.net.httpserver.HttpServer;
 import ru.yandex.practicum.taskmanager.manager.*;
@@ -8,7 +8,7 @@ import java.net.InetSocketAddress;
 public class HttpClassServer {
     public static final int PORT = 8080;
     public static final String hostName = "localhost";
-    private TaskManager manager;
+    final TaskManager manager;
     private HttpServer httpServer;
 
 

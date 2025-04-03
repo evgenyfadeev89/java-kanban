@@ -2,7 +2,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import ru.yandex.practicum.taskmanager.HttpServer.HttpClassServer;
+import ru.yandex.practicum.taskmanager.httpServer.HttpClassServer;
 import ru.yandex.practicum.taskmanager.manager.Managers;
 import ru.yandex.practicum.taskmanager.manager.TaskManager;
 import ru.yandex.practicum.taskmanager.parseAdapter.DurationAdapter;

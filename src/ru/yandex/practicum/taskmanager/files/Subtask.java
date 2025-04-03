@@ -1,16 +1,14 @@
 package ru.yandex.practicum.taskmanager.files;
 
-import com.google.gson.annotations.SerializedName;
 
 public class Subtask extends Task {
-    @SerializedName("subtaskType")
-    protected TaskType taskType;
 
     public Subtask(String name, String description, int epicId) {
         super(name, description);
         this.epicId = epicId;
         this.taskType = TaskType.SUBTASK;
     }
+
 
     public Subtask(TaskType taskType,
                    String name,
