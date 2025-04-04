@@ -13,8 +13,8 @@ public class Task {
     protected TaskType taskType;
     protected int epicId;
     protected Duration duration = Duration.ofMinutes(5);
-//    protected LocalDateTime startTime = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
     protected LocalDateTime startTime = LocalDateTime.now();
+
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
