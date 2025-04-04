@@ -1,4 +1,3 @@
-import com.google.gson.internal.bind.util.ISO8601Utils;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.taskmanager.files.Task;
 import ru.yandex.practicum.taskmanager.files.TaskStatus;
@@ -8,7 +7,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -196,7 +194,7 @@ public class HttpClassServerTestTask extends HttpClassServerTest {
                     .replace("\\u003d", "=")
                     .replace("\\u0027", "'")
                     .replace("\\\"", "\"")
-                    .replace("\"}]\"", "\"}]");
+                    .replace("]\"", "]");
 
             assertEquals(manager.getTasks().toString(), respBody, "Список задач не совпадает");
         } catch (Exception e) {

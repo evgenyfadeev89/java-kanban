@@ -61,6 +61,7 @@ class TaskHandler extends BaseHttpHandler {
 
         Task task = gson.fromJson(requestBody, Task.class);
 
+
         if (task == null) {
             sendText(exchange, "Неверный формат задачи", 400);
             return;

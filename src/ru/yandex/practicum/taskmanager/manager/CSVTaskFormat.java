@@ -2,6 +2,9 @@ package ru.yandex.practicum.taskmanager.manager;
 
 import ru.yandex.practicum.taskmanager.files.*;
 
+import java.time.Duration;
+import java.util.Objects;
+
 
 public class CSVTaskFormat {
     public static String toString(Task task) {
@@ -36,9 +39,11 @@ public class CSVTaskFormat {
         final String name = String.valueOf(values[2]);
         final TaskStatus status = TaskStatus.valueOf(values[3]);
         final String description = String.valueOf(values[4]);
-        final long duration = Integer.parseInt((values[5]));
+        final long duration = Objects.isNull(values[5]) ? Duration.ZERO.toMinutes() : Integer.parseInt((values[5]));
         final String startTime = values[6].equals("null") ? null : String.valueOf(values[6]);
         final String endTime = values[7].equals("null") ? null : String.valueOf(values[7]);
+//        final String startTime = Objects.isNull(values[6]) ? null : String.valueOf(values[6]);
+//        final String endTime = Objects.isNull(values[7]) ? null : String.valueOf(values[7]);
 
         switch (taskType) {
             case TASK:

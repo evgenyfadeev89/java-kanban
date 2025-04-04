@@ -210,7 +210,7 @@ public class HttpClassServerTestSubtask extends HttpClassServerTest {
                     .replace("\\u003d", "=")
                     .replace("\\u0027", "'")
                     .replace("\\\"", "\"")
-                    .replace("\"}]\"", "\"}]");
+                    .replace("]\"", "]");
 
             assertEquals(manager.getSubtasks().toString(), respBody, "Список задач не совпадает");
         } catch (Exception e) {

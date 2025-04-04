@@ -4,6 +4,7 @@ package ru.yandex.practicum.taskmanager.files;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class Task {
     protected int id;
@@ -12,12 +13,13 @@ public class Task {
     protected String description;
     protected TaskType taskType;
     protected int epicId;
-    protected Duration duration = Duration.ofMinutes(5);
-    protected LocalDateTime startTime = LocalDateTime.now();
+    protected Duration duration;// = Duration.ZERO;
+    protected LocalDateTime startTime;
 
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
+        this.duration = Duration.ZERO;
         this.status = TaskStatus.NEW;
         this.taskType = TaskType.TASK;
     }
@@ -30,6 +32,7 @@ public class Task {
         this.name = name;
         this.status = status;
         this.description = description;
+        this.duration = Duration.ZERO;
     }
 
     public Task(int id,
@@ -42,6 +45,7 @@ public class Task {
         this.name = name;
         this.status = status;
         this.description = description;
+        this.duration = Duration.ZERO;
     }
 
 
@@ -55,8 +59,8 @@ public class Task {
         this.name = name;
         this.status = status;
         this.description = description;
-        this.duration = Duration.ofMinutes(duration);
-        this.startTime = startTime != null ? LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : this.startTime;
+        this.duration = Objects.nonNull(duration) ? Duration.ofMinutes(duration) : Duration.ZERO;
+        this.startTime = Objects.nonNull(startTime) ? LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : null;
     }
 
     public Task(int id,
@@ -71,8 +75,8 @@ public class Task {
         this.name = name;
         this.status = status;
         this.description = description;
-        this.duration = Duration.ofMinutes(duration);
-        this.startTime = startTime != null ? LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : this.startTime;
+        this.duration = Objects.nonNull(duration) ? Duration.ofMinutes(duration) : Duration.ZERO;
+        this.startTime = Objects.nonNull(startTime) ? LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : null;
     }
 
 
@@ -117,7 +121,7 @@ public class Task {
     }
 
     public String getEndTime() {
-        if (startTime == null || (duration == null || duration.isZero())) {
+        if (Objects.isNull(startTime) || duration.isZero()) {
             return null;
         }
         return startTime.plus(duration).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
@@ -128,15 +132,15 @@ public class Task {
     }
 
     public void setDuration(long duration) {
-        this.duration = Duration.ofMinutes(duration);
+        this.duration = Objects.nonNull(duration) ? Duration.ofMinutes(duration) : Duration.ZERO;
     }
 
     public String getStartTime() {
-        return startTime != null ? startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : null;
+        return Objects.nonNull(startTime) ? startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : null;
     }
 
     public void setStartTime(String startTime) {
-        this.startTime = startTime != null ? LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : null;
+        this.startTime = Objects.nonNull(startTime) ? LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : null;
     }
 
     @Override
@@ -162,8 +166,8 @@ public class Task {
                 ", id=" + id +
                 ", status='" + status + "'" +
                 ", type=" + taskType +
-                ", duration=" + duration.toMinutes() +
-                ", startTime=\"" + startTime +
-                "\"}";
+                ", duration=" + duration +
+                ", startTime='" + startTime + "'" +
+                "}";
     }
 }

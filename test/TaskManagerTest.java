@@ -34,6 +34,15 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         assertNotNull(savedTask, "Задача не найдена.");
         assertEquals(task, savedTask, "Задачи не совпадают.");
+
+        Task task2 = new Task("Test addNewTask2",
+                "Test addNewTaskTest description"
+        );
+        final int taskId2 = taskManager.addNewTask(task2);
+        final Task savedTask2 = taskManager.getTask(taskId2);
+
+        assertNotNull(savedTask2, "Задача не найдена.");
+        assertEquals(task2, savedTask2, "Задачи не совпадают.");
     }
 
     @Test
@@ -392,7 +401,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         taskManager.deleteEpics();
         final ArrayList<Epic> deleteEpics = new ArrayList<>();
 
-        assertEquals(deleteEpics, taskManager.getTasks(), "Удаление epiks работает некорректно");
+        assertEquals(deleteEpics, taskManager.getEpics(), "Удаление epiks работает некорректно");
     }
 
     @Test

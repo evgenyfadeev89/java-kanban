@@ -54,8 +54,8 @@ public class Subtask extends Task {
                 ", status='" + status + "'" +
                 ", epicId=" + epicId +
                 ", type=" + taskType +
-                ", duration=" + duration.toMinutes() +
-                ", startTime=\"" + startTime + "\"" +
+                ", duration=" + duration +
+                ", startTime='" + startTime + "'" +
                 "}";
     }
 }

@@ -13,7 +13,7 @@ public class DurationAdapter extends TypeAdapter<Duration> {
     public void write(JsonWriter jsonWriter, Duration duration) throws IOException {
         String durationString = Objects.nonNull(duration)
                 ? String.valueOf(duration.toMinutes())
-                : Duration.ZERO.toString();
+                : null;
         jsonWriter.value(durationString);
     }
 
