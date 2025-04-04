@@ -6,9 +6,9 @@ import ru.yandex.practicum.taskmanager.manager.*;
 import java.net.InetSocketAddress;
 
 public class HttpClassServer {
-    public static final int PORT = 8080;
-    public static final String hostName = "localhost";
-    final TaskManager manager;
+    private static final int PORT = 8080;
+    private static final String hostName = "localhost";
+    public final TaskManager manager;
     private HttpServer httpServer;
 
 

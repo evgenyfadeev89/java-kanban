@@ -12,9 +12,9 @@ public class Task {
     protected String description;
     protected TaskType taskType;
     protected int epicId;
-    protected Duration duration = Duration.ZERO;
-    protected LocalDateTime startTime;
-
+    protected Duration duration = Duration.ofMinutes(5);
+//    protected LocalDateTime startTime = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+    protected LocalDateTime startTime = LocalDateTime.now();
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
@@ -56,7 +56,7 @@ public class Task {
         this.status = status;
         this.description = description;
         this.duration = Duration.ofMinutes(duration);
-        this.startTime = startTime != null ? LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : null;
+        this.startTime = startTime != null ? LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : this.startTime;
     }
 
     public Task(int id,
@@ -72,7 +72,7 @@ public class Task {
         this.status = status;
         this.description = description;
         this.duration = Duration.ofMinutes(duration);
-        this.startTime = startTime != null ? LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : null;
+        this.startTime = startTime != null ? LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : this.startTime;
     }
 
 
