@@ -13,7 +13,7 @@ public class Task {
     protected String description;
     protected TaskType taskType;
     protected int epicId;
-    protected Duration duration;// = Duration.ZERO;
+    protected Duration duration;
     protected LocalDateTime startTime;
 
     public Task(String name, String description) {
