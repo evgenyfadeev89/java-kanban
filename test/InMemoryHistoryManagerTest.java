@@ -22,7 +22,8 @@ class InMemoryHistoryManagerTest extends InMemoryHistoryManager {
             TaskStatus.NEW,
             "Test addNewTask1Test description",
             10,
-            "2025-02-22 10:00");
+            "2025-02-22 10:00"
+            );
 
     Task task2 = new Task(2,
             TaskType.TASK,

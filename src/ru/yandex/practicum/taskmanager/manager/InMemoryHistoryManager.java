@@ -47,19 +47,21 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add(Task task) {
-        remove(task.getId());
-        viewTasks.remove(task);
+        if (Objects.nonNull(task)) {
+            remove(task.getId());
+            viewTasks.remove(task);
 
-        if (nodeMap.isEmpty()) {
-            linkFirst(task);
-        } else if (nodeMap.size() == 1) {
-            linkLast(task);
-            first.next = last;
-        } else {
-            linkLast(task);
+            if (nodeMap.isEmpty()) {
+                linkFirst(task);
+            } else if (nodeMap.size() == 1) {
+                linkLast(task);
+                first.next = last;
+            } else {
+                linkLast(task);
+            }
+            nodeMap.put(task.getId(), last);
+            viewTasks.add(0, task);
         }
-        nodeMap.put(task.getId(), last);
-        viewTasks.add(0, task);
     }
 
     @Override

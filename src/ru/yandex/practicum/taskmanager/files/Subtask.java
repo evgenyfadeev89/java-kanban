@@ -2,13 +2,13 @@ package ru.yandex.practicum.taskmanager.files;
 
 
 public class Subtask extends Task {
-    protected TaskType taskType;
 
     public Subtask(String name, String description, int epicId) {
         super(name, description);
         this.epicId = epicId;
         this.taskType = TaskType.SUBTASK;
     }
+
 
     public Subtask(TaskType taskType,
                    String name,
@@ -54,8 +54,8 @@ public class Subtask extends Task {
                 ", status='" + status + "'" +
                 ", epicId=" + epicId +
                 ", type=" + taskType +
-                ", duration=" + duration.toMinutes() +
-                ", startTime=" + startTime +
+                ", duration=" + duration +
+                ", startTime='" + startTime + "'" +
                 "}";
     }
 }
